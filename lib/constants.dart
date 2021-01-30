@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otsappmobile/models/user_model.dart';
 import 'package:otsappmobile/size_config.dart';
 
 const kPrimaryColor = Color(0xFFFF7643);
@@ -22,7 +23,7 @@ final headingStyle = TextStyle(
 
 const String AppName = "TEST";
 
-const String apiUrl = "http://192.168.2.241:45457/api";
+const String apiUrl = "http://192.168.2.241:45455/api";
 
 const defaultDuration = Duration(milliseconds: 250);
 
@@ -43,6 +44,7 @@ const String kNewPassNullError = "Lütfen yeni şifrenizi giriniz";
 String sToken = "";
 int sUserID;
 DateTime sExpiration;
+UserModel sUser;
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

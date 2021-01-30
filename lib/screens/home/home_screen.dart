@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:otsappmobile/components/bottom_navigation_bar.dart';
 import 'package:otsappmobile/components/default_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,6 +15,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         title: Text("Anasayfa"),
         centerTitle: true,
       ),
@@ -24,6 +26,9 @@ class _HomeScreenState extends State<HomeScreen> {
           prefs.remove("email");
           prefs.remove("password");
         },
+      ),
+      bottomNavigationBar: BottomNavigatonBar(
+        activeIndex: 0,
       ),
     );
   }

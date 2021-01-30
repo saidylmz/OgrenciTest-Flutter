@@ -4,6 +4,7 @@ import 'package:otsappmobile/models/login_model.dart';
 import 'package:otsappmobile/screens/home/home_screen.dart';
 import 'package:otsappmobile/screens/login/login_screen.dart';
 import 'package:otsappmobile/services/auth_service.dart';
+import 'package:otsappmobile/services/user_service.dart';
 import 'package:otsappmobile/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -41,15 +42,19 @@ class _BodyState extends State<Body> {
     String email = (prefs.getString('email'));
     String password = (prefs.getString('password'));
 
-    if (email != null && email.isNotEmpty && password != null && password.isNotEmpty) {
+    if (email != null &&
+        email.isNotEmpty &&
+        password != null &&
+        password.isNotEmpty) {
       LoginModel loginModel = await AuthService().login(email, password);
       if (loginModel.error.isEmpty) {
-        setState(() {
+        setState(()  {
           sToken = loginModel.token;
           sUserID = loginModel.userId;
           sExpiration = loginModel.expiration;
           state = 2;
         });
+        sUser = await UserService().getUserById(sUserID);
       } else {
         setState(() {
           state = 1;
@@ -65,8 +70,7 @@ class _BodyState extends State<Body> {
   @override
   void initState() {
     super.initState();
-    if(sExpiration == null || sExpiration.isBefore(DateTime.now()))
-      getData();
+    if (sExpiration == null || sExpiration.isBefore(DateTime.now())) getData();
   }
 
   @override

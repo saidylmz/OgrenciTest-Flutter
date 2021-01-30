@@ -7,6 +7,7 @@ import 'package:otsappmobile/models/login_model.dart';
 import 'package:otsappmobile/screens/forgot_password/forgot_password_screen.dart';
 import 'package:otsappmobile/screens/home/home_screen.dart';
 import 'package:otsappmobile/services/auth_service.dart';
+import 'package:otsappmobile/services/user_service.dart';
 import 'package:otsappmobile/size_config.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -99,7 +100,6 @@ class _LoginFormState extends State<LoginForm> {
                 _formKey.currentState.save();
                 LoginModel loginModel =
                     await AuthService().login(email, password);
-
                 if (loginModel.error.isNotEmpty &&
                     !errors.contains(loginModel.error)) {
                   setState(() {
@@ -117,6 +117,7 @@ class _LoginFormState extends State<LoginForm> {
                     sUserID = loginModel.userId;
                     sExpiration = loginModel.expiration;
                   });
+                  sUser = await UserService().getUserById(sUserID);
                   Navigator.pushNamed(context, HomeScreen.routeName);
                 }
               }

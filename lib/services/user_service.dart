@@ -1,6 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:http/http.dart';
+import 'package:otsappmobile/models/user_model.dart';
 
 import '../constants.dart';
 
@@ -25,5 +27,16 @@ class UserService {
           {"Email": email, "OldPassword": oldPass, "NewPassword": newPass})),
     );
     return response.body;
+  }
+
+  Future<UserModel> getUserById(int userId) async {
+    final response = await client.post(
+      "$apiUrl/Users/GetUserById",
+      headers: {"content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken },
+      body: (json.encode({"value": userId})),
+    );
+    if (response.statusCode == 200) return userModelFromJson(response.body);
+    return UserModel();
   }
 }
