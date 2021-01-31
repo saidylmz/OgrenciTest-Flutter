@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:otsappmobile/components/default_button.dart';
 import 'package:otsappmobile/models/test_detail.dart';
+import 'package:otsappmobile/models/test_question_screen_model.dart';
+import 'package:otsappmobile/screens/test_question/test_question_screen.dart';
 import 'package:otsappmobile/size_config.dart';
 
 import '../../../constants.dart';
@@ -84,7 +86,10 @@ class _BodyState extends State<Body> {
             padding: const EdgeInsets.all(20),
             child: DefaultButton(
               text: "Testi Başlat",
-              press: () => {},
+              press: () => {
+                Navigator.pushNamed(context, TestQuestionScreen.routeName,
+                    arguments: TestQuestionScreenModel(model.id, model.name))
+              },
             ),
           ),
         ),

@@ -20,10 +20,15 @@ final headingStyle = TextStyle(
   color: Colors.black,
   height: 1.5,
 );
+const kPrimaryGradient = LinearGradient(
+  colors: [kPrimaryColor, kPrimaryLightColor],
+  begin: Alignment.centerLeft,
+  end: Alignment.centerRight,
+);
 
 const String AppName = "TEST";
 
-const String apiUrl = "http://192.168.2.241:45455/api";
+const String apiUrl = "http://192.168.2.241:45456/api";
 
 const defaultDuration = Duration(milliseconds: 250);
 

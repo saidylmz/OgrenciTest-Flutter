@@ -6,6 +6,7 @@ import 'package:otsappmobile/screens/new_password/new_password.dart';
 import 'package:otsappmobile/screens/splash/splash_screen.dart';
 import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
 import 'package:otsappmobile/screens/test_home/test_home_screen.dart';
+import 'package:otsappmobile/screens/test_question/test_question_screen.dart';
 
 final Map<String, WidgetBuilder> routes = {
   SplashScreen.routeName: (context) => SplashScreen(),
@@ -15,4 +16,5 @@ final Map<String, WidgetBuilder> routes = {
   HomeScreen.routeName: (context) => HomeScreen(),
   TestHomeScreen.routeName: (context) => TestHomeScreen(),
   TestDetailScreen.routeName: (context) => TestDetailScreen(),
+  TestQuestionScreen.routeName: (context) => TestQuestionScreen(),
 };

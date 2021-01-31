@@ -14,6 +14,7 @@ class AuthService {
       headers: {"content-type": "application/json"},
       body: (json.encode({ "Email": email, "Password": password })),
     );
+      print(response.body);
     if (response.statusCode == 200) {
       return loginModelFromJson(response.body);
     } else {
