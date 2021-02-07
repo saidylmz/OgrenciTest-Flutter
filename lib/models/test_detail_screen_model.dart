@@ -1,8 +1,7 @@
 class TestDetailScreenModel {
-  TestDetailScreenModel(this.endDate, this.startDate, this.testId,
-      {this.isCompleted});
+  TestDetailScreenModel(this.testId,
+      {this.endDate, this.startDate, this.isCompleted});
   int testId;
-  DateTime startDate;
-  DateTime endDate;
+  DateTime endDate, startDate;
   bool isCompleted;
 }

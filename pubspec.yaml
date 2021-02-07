@@ -35,6 +35,8 @@ dependencies:
   convex_bottom_bar: ^2.6.0
   intl: ^0.16.1
   flutter_html: ^1.2.0
+  commons: ^0.7.8+3
+  blinking_text: ^0.0.4+1
 
 dev_dependencies:
   flutter_test:

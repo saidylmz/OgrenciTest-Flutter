@@ -8,13 +8,16 @@ class TestQuestionScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     var model =
         ModalRoute.of(context).settings.arguments as TestQuestionScreenModel;
-    return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: Text(model.name),
-        automaticallyImplyLeading: false,
+    return WillPopScope(
+          onWillPop: () { return null; },
+          child: Scaffold(
+        appBar: AppBar(
+          centerTitle: true,
+          title: Text(model.name),
+          automaticallyImplyLeading: false,
+        ),
+        body: Body(testId: model.testId, testQuestionCount: model.testQuestionCount),
       ),
-      body: Body(testId: model.testId),
     );
   }
 }

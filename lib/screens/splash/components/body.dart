@@ -114,9 +114,9 @@ class _BodyState extends State<Body> {
                       text: "Geç",
                       press: () {
                         if (state == 1)
-                          Navigator.pushNamed(context, LoginScreen.routeName);
+                          Navigator.pushNamedAndRemoveUntil(context, LoginScreen.routeName, (r)=>false);
                         else if (state == 2)
-                          Navigator.pushNamed(context, HomeScreen.routeName);
+                          Navigator.pushNamedAndRemoveUntil(context, HomeScreen.routeName, (r)=>false);
                       },
                     ),
                     Spacer()

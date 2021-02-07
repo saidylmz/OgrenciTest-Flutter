@@ -1,15 +1,21 @@
 import 'dart:async';
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:otsappmobile/models/test_detail_screen_model.dart';
+import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
 import '../../../constants.dart';
 
 class ProgressBar extends StatefulWidget {
   const ProgressBar({
     Key key,
     @required this.minute,
+    this.timeout, this.testId,
   }) : super(key: key);
 
+  final VoidCallback timeout;
   final int minute;
+  final int testId;
 
   @override
   _ProgressBarState createState() => _ProgressBarState();
@@ -34,9 +40,8 @@ class _ProgressBarState extends State<ProgressBar> {
       width: double.infinity,
       height: 35,
       decoration: BoxDecoration(
-        border: Border.all(color: kPrimaryColor, width: 1),
-        borderRadius: BorderRadius.circular(50)
-      ),
+          border: Border.all(color: kPrimaryColor, width: 1),
+          borderRadius: BorderRadius.circular(50)),
       child: Stack(
         children: [
           // LayoutBuilder provide us the available space for the conatiner
@@ -46,9 +51,8 @@ class _ProgressBarState extends State<ProgressBar> {
               // from 0 to 1 it takes 60s
               width: constraints.maxWidth * (_start / widget.minute),
               decoration: BoxDecoration(
-                gradient: kPrimaryGradient,
-                borderRadius: BorderRadius.circular(50)
-              ),
+                  gradient: kPrimaryGradient,
+                  borderRadius: BorderRadius.circular(50)),
             ),
           ),
           Positioned.fill(
@@ -86,6 +90,18 @@ class _ProgressBarState extends State<ProgressBar> {
           setState(() {
             timer.cancel();
           });
+          widget.timeout();
+          errorDialog(
+            context,
+            "Cevaplarınız kaydedilmiştir.",
+            title: "Süre Bitti!",
+            positiveText: "Tamam",
+            closeOnBackPress: false,
+            showNeutralButton: false,
+            positiveAction: (){
+              Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: TestDetailScreenModel(widget.testId));
+            }
+          );
         } else {
           setState(() {
             _start++;

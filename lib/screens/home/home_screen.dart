@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:otsappmobile/components/bottom_navigation_bar.dart';
-import 'package:otsappmobile/components/default_button.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
+import 'components/body.dart';
 class HomeScreen extends StatefulWidget {
   static String routeName = "/home";
 
@@ -14,20 +13,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        title: Text("Anasayfa"),
-        centerTitle: true,
-      ),
-      body: DefaultButton(
-        text: "Temizle",
-        press: () async {
-          SharedPreferences prefs = await SharedPreferences.getInstance();
-          prefs.remove("email");
-          prefs.remove("password");
-        },
-      ),
-      
+      body: Body(),
       bottomNavigationBar: BottomNavigatonBar(
         activeIndex: 0,
       ),

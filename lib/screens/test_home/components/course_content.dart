@@ -30,8 +30,8 @@ class CourseContent extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           TestDetailScreen.routeName,
-                          arguments: TestDetailScreenModel(model[index].endDate,
-                              model[index].startDate, model[index].testId,
+                          arguments: TestDetailScreenModel(model[index].testId, 
+                          endDate: model[index].endDate, startDate: model[index].startDate, 
                               isCompleted: model[index].isActive),
                         )
                       },
@@ -91,25 +91,6 @@ class TestCard extends StatelessWidget {
                 )
               ],
             ),
-            // child: RichText(
-            //   text: TextSpan(
-            //     children: [
-            //       TextSpan(
-            //         text: test.testName + "\n",
-            //         style: TextStyle(
-            //           color: Colors.black87,
-            //           fontSize: 18,
-            //         ),
-            //       ),
-            //       TextSpan(
-            //         text: test.lessonName + " / " + test.lessonSubjectName,
-            //         style: TextStyle(
-            //             color: kTextColor.withOpacity(.8),
-            //             fontWeight: FontWeight.w600),
-            //       ),
-            //     ],
-            //   ),
-            // ),
           ),
         ),
         Spacer(),

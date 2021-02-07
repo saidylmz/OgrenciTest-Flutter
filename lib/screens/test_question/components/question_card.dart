@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_html/style.dart';
 import 'package:otsappmobile/models/test_question_model.dart';
-import 'package:otsappmobile/screens/test_question/components/option.dart';
 
 import '../../../constants.dart';
 
@@ -12,9 +12,13 @@ class QuestionCard extends StatefulWidget {
     Key key,
     // it means we have to pass this
     @required this.question,
+    @required this.press,
+    this.selectedAnswer,
   }) : super(key: key);
 
   final TestQuestionModel question;
+  final ValueChanged<String> press;
+  final String selectedAnswer;
 
   @override
   _QuestionCardState createState() => _QuestionCardState();
@@ -23,8 +27,10 @@ class QuestionCard extends StatefulWidget {
 class _QuestionCardState extends State<QuestionCard> {
   @override
   Widget build(BuildContext context) {
-    List<GlobalKey<_OptionState>> options = List.filled(5, GlobalKey());
-    for (var i = 0; i < 5; i++) {
+    List<String> qOptions = ["A", "B", "C", "D", "E"];
+    List<GlobalKey<_OptionState>> options =
+        List.filled(qOptions.length, GlobalKey());
+    for (var i = 0; i < qOptions.length; i++) {
       options[i] = GlobalKey();
     }
     return Column(
@@ -35,142 +41,18 @@ class _QuestionCardState extends State<QuestionCard> {
           padding: const EdgeInsets.all(8.0),
           child: Column(
             children: [
-              // FlatButton(
-              //   color: selected == "A" ? kPrimaryColor : Colors.transparent,
-              //   shape: RoundedRectangleBorder(
-              //     side: BorderSide(
-              //         color: Colors.grey, width: 1, style: BorderStyle.solid),
-              //     borderRadius: BorderRadius.circular(50),
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       selected = "A";
-              //     });
-              //   },
-              //   child: Container(
-              //     child: Html(
-              //       data: "<b>A)</b> " + widget.question.questionA,
-              //     ),
-              //   ),
-              // ),
-              // FlatButton(
-              //   color: selected == "B" ? kPrimaryColor : Colors.transparent,
-              //   shape: RoundedRectangleBorder(
-              //     side: BorderSide(
-              //         color: Colors.grey, width: 1, style: BorderStyle.solid),
-              //     borderRadius: BorderRadius.circular(50),
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       selected = "B";
-              //     });
-              //   },
-              //   child: Container(
-              //       child: Html(
-              //     data: "<b>B)</b> " + widget.question.questionA,
-              //   )),
-              // ),
-              // FlatButton(
-              //   color: selected == "C" ? kPrimaryColor : Colors.transparent,
-              //   shape: RoundedRectangleBorder(
-              //     side: BorderSide(
-              //         color: Colors.grey, width: 1, style: BorderStyle.solid),
-              //     borderRadius: BorderRadius.circular(50),
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       selected = "C";
-              //     });
-              //   },
-              //   child: Container(
-              //       child: Html(
-              //     data: "<b>C)</b> " + widget.question.questionA,
-              //   )),
-              // ),
-              // FlatButton(
-              //   color: selected == "D" ? kPrimaryColor : Colors.transparent,
-              //   shape: RoundedRectangleBorder(
-              //     side: BorderSide(
-              //         color: Colors.grey, width: 1, style: BorderStyle.solid),
-              //     borderRadius: BorderRadius.circular(50),
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       selected = "D";
-              //     });
-              //   },
-              //   child: Container(
-              //       child: Html(
-              //     data: "<b>D)</b> " + widget.question.questionA,
-              //   )),
-              // ),
-              // FlatButton(
-              //   color: selected == "E" ? kPrimaryColor : Colors.transparent,
-              //   shape: RoundedRectangleBorder(
-              //     side: BorderSide(
-              //         color: Colors.grey, width: 1, style: BorderStyle.solid),
-              //     borderRadius: BorderRadius.circular(50),
-              //   ),
-              //   onPressed: () {
-              //     setState(() {
-              //       selected = "E";
-              //     });
-              //   },
-              //   child: Container(
-              //       child: Html(
-              //     data: "<b>E)</b> " + widget.question.questionA,
-              //   )),
-              // ),
-              Option(
-                key: options[0],
-                text: widget.question.questionA,
-                index: "A",
-                press: () {
-                  for (var i = 0; i < 5; i++) {
-                    options[i].currentState.changeSelected("A");
-                  }
-                },
-              ),
-              Option(
-                key: options[1],
-                text: widget.question.questionB,
-                index: "B",
-                press: () {
-                  for (var i = 0; i < 5; i++) {
-                    options[i].currentState.changeSelected("B");
-                  }
-                },
-              ),
-              Option(
-                key: options[2],
-                text: widget.question.questionC,
-                index: "C",
-                press: () {
-                  for (var i = 0; i < 5; i++) {
-                    options[i].currentState.changeSelected("C");
-                  }
-                },
-              ),
-              Option(
-                key: options[3],
-                text: widget.question.questionD,
-                index: "D",
-                press: () {
-                  for (var i = 0; i < 5; i++) {
-                    options[i].currentState.changeSelected("D");
-                  }
-                },
-              ),
-              if (widget.question.questionE.isNotEmpty)
+              for (var i = 0; i < qOptions.length; i++)
                 Option(
-                  key: options[4],
-                  text: widget.question.questionE,
-                  index: "E",
+                  key: options[i],
+                  text: widget.question.toJson()["Question"+qOptions[i]],
+                  index: qOptions[i],
+                  selectedIndex: widget.selectedAnswer,
                   press: () {
-                  for (var i = 0; i < 5; i++) {
-                    options[i].currentState.changeSelected("E");
-                  }
-                },
+                    for (var q = 0; q < qOptions.length; q++) {
+                      options[q].currentState.changeSelected(qOptions[i]);
+                    }
+                    widget.press(qOptions[i]);
+                  },
                 ),
             ],
           ),
@@ -186,10 +68,12 @@ class Option extends StatefulWidget {
     @required this.text,
     @required this.index,
     @required this.press,
+    @required this.selectedIndex
   }) : super(key: key);
   final String text;
   final String index;
   final VoidCallback press;
+  final String selectedIndex;
   @override
   _OptionState createState() => _OptionState();
 }
@@ -198,7 +82,7 @@ class _OptionState extends State<Option> {
   bool selected;
   @override
   Widget build(BuildContext context) {
-    selected ??= false;
+    selected ??= widget.selectedIndex == widget.index;
     return FlatButton(
       color: selected ? kPrimaryColor : Colors.transparent,
       shape: RoundedRectangleBorder(
@@ -213,9 +97,13 @@ class _OptionState extends State<Option> {
         widget.press();
       },
       child: Container(
-          child: Html(
-        data: "<b>" + widget.index + ")</b> " + widget.text,
-      )),
+        child: Html(
+          data: "<b>" + widget.index + ")</b> " + widget.text,
+          style: {
+            "html": Style(color: selected ? Colors.white : Colors.black),
+          },
+        ),
+      ),
     );
   }
 

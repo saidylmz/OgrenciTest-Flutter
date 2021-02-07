@@ -87,8 +87,9 @@ class _BodyState extends State<Body> {
             child: DefaultButton(
               text: "Testi Başlat",
               press: () => {
-                Navigator.pushNamed(context, TestQuestionScreen.routeName,
-                    arguments: TestQuestionScreenModel(model.id, model.name))
+                Navigator.popAndPushNamed(context, TestQuestionScreen.routeName,
+                    arguments: TestQuestionScreenModel(
+                        model.id, model.questionCount, model.name))
               },
             ),
           ),

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:http/http.dart';
 import 'package:otsappmobile/models/get_user_test_model.dart';
+import 'package:otsappmobile/models/test_answer.dart';
 import 'package:otsappmobile/models/test_detail.dart';
 import 'package:otsappmobile/models/test_home_model.dart';
 import 'package:otsappmobile/models/test_question_model.dart';
@@ -41,6 +42,7 @@ class TestService {
     }
     return null;
   }
+
   Future<List<TestQuestionModel>> getTestQuestions(int testId) async {
     final response = await client.post(
       "$apiUrl/TestQuestions/GetAllTestQuestions",
@@ -52,6 +54,21 @@ class TestService {
     );
     if (response.statusCode == 200) {
       return testQuestionModelFromJson(response.body);
+    }
+    return null;
+  }
+
+  Future<String> addTestAnswers(List<TestAnswerModel> testAnswerModel) async {
+    final response = await client.post(
+      "$apiUrl/TestQuestions/AddTestAnswers",
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
+      body: (addTestAnswersModelToJson(testAnswerModel)),
+    );
+    if (response.statusCode == 200) {
+      return response.body;
     }
     return null;
   }

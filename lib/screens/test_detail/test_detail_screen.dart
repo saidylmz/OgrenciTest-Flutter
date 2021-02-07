@@ -14,24 +14,24 @@ class TestDetailScreen extends StatefulWidget {
 String title = "Test Detay";
 
 class _TestDetailScreenState extends State<TestDetailScreen> {
-
   @override
   Widget build(BuildContext context) {
-    var model = ModalRoute.of(context).settings.arguments as TestDetailScreenModel;
+    var model =
+        ModalRoute.of(context).settings.arguments as TestDetailScreenModel;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: TestService()
-            .getTestDetail(model.testId),
+        future: TestService().getTestDetail(model.testId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             var getData = (snapshot.data as TestDetailModel);
-            getData.startDate = model.startDate;
-            getData.endDate = model.endDate;
-            if(model.isCompleted != null) getData.isComplete = model.isCompleted;
+            getData.startDate = model.startDate ?? DateTime.now();
+            getData.endDate = model.endDate ?? DateTime.now();
+            if (model.isCompleted != null)
+              getData.isComplete = model.isCompleted;
             title = getData.name;
             return Body(model: getData);
           } else
