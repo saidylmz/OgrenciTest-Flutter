@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/models/test_detail_screen_model.dart';
-import 'package:otsappmobile/models/test_home_model.dart';
-import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
-import 'package:otsappmobile/size_config.dart';
+
+import '../../../models/test_home_model.dart';
+import '../../../screens/test_detail/test_detail_screen.dart';
+import '../../../size_config.dart';
 import '../../../constants.dart';
 
 class CourseContent extends StatelessWidget {
@@ -30,9 +30,7 @@ class CourseContent extends StatelessWidget {
                         Navigator.pushNamed(
                           context,
                           TestDetailScreen.routeName,
-                          arguments: TestDetailScreenModel(model[index].testId, 
-                          endDate: model[index].endDate, startDate: model[index].startDate, 
-                              isCompleted: model[index].isActive),
+                          arguments: model[index].testId,
                         )
                       },
                     ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/models/user_model.dart';
-import 'package:otsappmobile/size_config.dart';
+import 'models/user_model.dart';
+import 'size_config.dart';
 
 const kPrimaryColor = Color(0xFFFF7643);
 const kPrimaryLightColor = Color(0xFFFFECDF);

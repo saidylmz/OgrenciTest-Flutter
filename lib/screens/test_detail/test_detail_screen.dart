@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/models/test_detail.dart';
-import 'package:otsappmobile/models/test_detail_screen_model.dart';
-import 'package:otsappmobile/services/test_service.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:otsappmobile/controllers/TestDetailController.dart';
+import '../../models/test_detail.dart';
+import '../../services/test_service.dart';
 
 import 'components/body.dart';
 
@@ -13,27 +14,36 @@ class TestDetailScreen extends StatefulWidget {
 
 String title = "Test Detay";
 
-class _TestDetailScreenState extends State<TestDetailScreen> {
+class _TestDetailScreenState extends StateMVC<TestDetailScreen> {
+  _TestDetailScreenState() : super(TestDetailController()) {
+    _controller = controller;
+  }
+  TestDetailController _controller;
   @override
   Widget build(BuildContext context) {
-    var model =
-        ModalRoute.of(context).settings.arguments as TestDetailScreenModel;
+    _controller.testId = ModalRoute.of(context).settings.arguments as int;
     return Scaffold(
       appBar: AppBar(
         title: Text(title),
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: TestService().getTestDetail(model.testId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var getData = (snapshot.data as TestDetailModel);
-            getData.startDate = model.startDate ?? DateTime.now();
-            getData.endDate = model.endDate ?? DateTime.now();
-            if (model.isCompleted != null)
-              getData.isComplete = model.isCompleted;
-            title = getData.name;
-            return Body(model: getData);
+        future: TestService().getUserTestInfo(_controller.testId),
+        builder: (context2, snapshot2) {
+          if (snapshot2.hasData) {
+            _controller.testInfo = snapshot2.data;
+            return FutureBuilder(
+              future: TestService().getTestDetail(_controller.testId),
+              builder: (context, snapshot) {
+                if (snapshot.hasData && _controller.testInfo != null) {
+                  _controller.testDetail = snapshot.data as TestDetailModel;
+                  title = _controller.testDetail.name;
+                  return Body(controller: _controller);
+                } else
+                  return Center(
+                      child: Image.asset("assets/images/spinner.gif"));
+              },
+            );
           } else
             return Center(child: Image.asset("assets/images/spinner.gif"));
         },

@@ -2,8 +2,7 @@ import 'dart:async';
 import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:otsappmobile/models/test_detail_screen_model.dart';
-import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
+import '../../../screens/test_detail/test_detail_screen.dart';
 import '../../../constants.dart';
 
 class ProgressBar extends StatefulWidget {
@@ -43,12 +42,9 @@ class _ProgressBarState extends State<ProgressBar> {
           border: Border.all(color: kPrimaryColor, width: 1),
           borderRadius: BorderRadius.circular(50)),
       child: Stack(
-        children: [
-          // LayoutBuilder provide us the available space for the conatiner
-          // constraints.maxWidth needed for our animation
+        children: [ 
           LayoutBuilder(
-            builder: (context, constraints) => Container(
-              // from 0 to 1 it takes 60s
+            builder: (context, constraints) => Container( 
               width: constraints.maxWidth * (_start / widget.minute),
               decoration: BoxDecoration(
                   gradient: kPrimaryGradient,
@@ -57,7 +53,7 @@ class _ProgressBarState extends State<ProgressBar> {
           ),
           Positioned.fill(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 20 / 2),
+              padding: const EdgeInsets.symmetric(horizontal: 10),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -82,7 +78,7 @@ class _ProgressBarState extends State<ProgressBar> {
   Timer _timer;
   int _start = 1;
   void startTimer() {
-    const oneMin = const Duration(seconds: 1);
+    const oneMin = const Duration(minutes: 1);
     _timer = new Timer.periodic(
       oneMin,
       (Timer timer) {
@@ -99,7 +95,7 @@ class _ProgressBarState extends State<ProgressBar> {
             closeOnBackPress: false,
             showNeutralButton: false,
             positiveAction: (){
-              Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: TestDetailScreenModel(widget.testId));
+              Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.testId);
             }
           );
         } else {

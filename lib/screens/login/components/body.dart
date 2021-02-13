@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/components/custom_suffix_icon.dart';
-import 'package:otsappmobile/components/default_button.dart';
-import 'package:otsappmobile/components/form_error.dart';
-import 'package:otsappmobile/constants.dart';
-import 'package:otsappmobile/models/login_model.dart';
-import 'package:otsappmobile/screens/forgot_password/forgot_password_screen.dart';
-import 'package:otsappmobile/screens/home/home_screen.dart';
-import 'package:otsappmobile/services/auth_service.dart';
-import 'package:otsappmobile/services/user_service.dart';
-import 'package:otsappmobile/size_config.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
-class Body extends StatelessWidget {
+import '../../../components/custom_suffix_icon.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../constants.dart';
+import '../../../screens/forgot_password/forgot_password_screen.dart';
+import '../../../screens/home/home_screen.dart';
+import '../../../size_config.dart';
+import '../../../controllers/LoginController.dart';
+
+LoginController _controller;
+
+class Body extends StatefulWidget {
+  final LoginController controller;
+
+  const Body({Key key, this.controller}) : super(key: key);
+  @override
+  _BodyState createState() {
+    _controller = controller;
+    return _BodyState();
+  }
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -50,16 +62,11 @@ class LoginForm extends StatefulWidget {
   _LoginFormState createState() => _LoginFormState();
 }
 
-class _LoginFormState extends State<LoginForm> {
-  final _formKey = GlobalKey<FormState>();
-  String email;
-  String password;
-  bool remember = false;
-  final List<String> errors = [];
+class _LoginFormState extends StateMVC<LoginForm> {
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: _controller.formKey,
       child: Column(
         children: [
           buildEmailFormField(),
@@ -68,12 +75,10 @@ class _LoginFormState extends State<LoginForm> {
           Row(
             children: [
               Checkbox(
-                value: remember,
+                value: _controller.remember,
                 activeColor: kPrimaryColor,
                 onChanged: (value) {
-                  setState(() {
-                    remember = value;
-                  });
+                  _controller.setRemember(value);
                 },
               ),
               Text("Beni Hatırla"),
@@ -88,41 +93,17 @@ class _LoginFormState extends State<LoginForm> {
               )
             ],
           ),
-          FormError(errors: errors),
+          FormError(errors: _controller.errors),
           SizedBox(height: getProportionateScreenHeight(50)),
           DefaultButton(
             text: "Giriş Yap",
             press: () async {
-              setState(() {
-                errors.removeRange(0, errors.length);
-              });
-              if (_formKey.currentState.validate()) {
-                _formKey.currentState.save();
-                LoginModel loginModel =
-                    await AuthService().login(email, password);
-                if (loginModel.error.isNotEmpty &&
-                    !errors.contains(loginModel.error)) {
-                  setState(() {
-                    errors.add(loginModel.error);
-                  });
-                } else if (loginModel.error.isEmpty) {
-                  if (remember) {
-                    SharedPreferences prefs =
-                        await SharedPreferences.getInstance();
-                    prefs.setString('email', email);
-                    prefs.setString('password', password);
-                  }
-                  setState(() {
-                    sToken = loginModel.token;
-                    sUserID = loginModel.userId;
-                    sExpiration = loginModel.expiration;
-                  });
-                  sUser = await UserService().getUserById(sUserID);
-                  Navigator.pushNamed(context, HomeScreen.routeName);
-                }
-              }
+              bool res = await _controller.pressedLogin();
+              if (res)
+                Navigator.pushNamedAndRemoveUntil(
+                    context, HomeScreen.routeName, (r) => false);
             },
-          )
+          ),
         ],
       ),
     );
@@ -131,28 +112,18 @@ class _LoginFormState extends State<LoginForm> {
   TextFormField buildPasswordFormField() {
     return TextFormField(
       obscureText: true,
-      onSaved: (newValue) => password = newValue,
+      onSaved: (newValue) => _controller.password = newValue,
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kPassNullError)) {
-          setState(() {
-            errors.remove(kPassNullError);
-          });
+        if (value.isNotEmpty && _controller.errors.contains(kPassNullError)) {
+          _controller.removeError(kPassNullError);
         }
-        if (errors.length == 0)
-          return null;
-        else
-          return "";
+        return _controller.errors.length == 0 ? null : "";
       },
       validator: (value) {
-        if (value.isEmpty && !errors.contains(kPassNullError)) {
-          setState(() {
-            errors.add(kPassNullError);
-          });
+        if (value.isEmpty && !_controller.errors.contains(kPassNullError)) {
+          _controller.addError(kPassNullError);
         }
-        if (errors.length == 0)
-          return null;
-        else
-          return "";
+        return _controller.errors.length == 0 ? null : "";
       },
       decoration: InputDecoration(
         labelText: "Şifre",
@@ -170,38 +141,25 @@ class _LoginFormState extends State<LoginForm> {
   TextFormField buildEmailFormField() {
     return TextFormField(
       keyboardType: TextInputType.emailAddress,
-      onSaved: (newValue) => email = newValue,
+      onSaved: (newValue) => _controller.email = newValue,
       onChanged: (value) {
-        if (value.isNotEmpty && errors.contains(kEmailNullError)) {
-          setState(() {
-            errors.remove(kEmailNullError);
-          });
+        if (value.isNotEmpty && _controller.errors.contains(kEmailNullError)) {
+          _controller.removeError(kEmailNullError);
         } else if (emailValidatorRegExp.hasMatch(value) &&
-            errors.contains(kInvalidEmailError)) {
-          setState(() {
-            errors.remove(kInvalidEmailError);
-          });
+            _controller.errors.contains(kInvalidEmailError)) {
+          _controller.removeError(kInvalidEmailError);
         }
-        if (errors.length == 0)
-          return null;
-        else
-          return "";
+        return _controller.errors.length == 0 ? null : "";
       },
       validator: (value) {
-        if (value.isEmpty && !errors.contains(kEmailNullError)) {
-          setState(() {
-            errors.add(kEmailNullError);
-          });
+        if (value.isEmpty && !_controller.errors.contains(kEmailNullError)) {
+          _controller.addError(kEmailNullError);
         } else if (!emailValidatorRegExp.hasMatch(value) &&
-            !errors.contains(kInvalidEmailError)) {
-          setState(() {
-            errors.add(kInvalidEmailError);
-          });
+            !_controller.errors.contains(kInvalidEmailError)) {
+          _controller.addError(kInvalidEmailError);
         }
-        if (errors.length == 0)
-          return null;
-        else
-          return "";
+
+        return _controller.errors.length == 0 ? null : "";
       },
       decoration: InputDecoration(
         labelText: "Email",

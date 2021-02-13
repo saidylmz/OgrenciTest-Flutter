@@ -1,9 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
-
 import 'package:http/http.dart';
-import 'package:otsappmobile/models/user_model.dart';
 
+import '../models/user_model.dart';
 import '../constants.dart';
 
 class UserService {

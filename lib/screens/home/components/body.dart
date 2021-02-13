@@ -1,8 +1,8 @@
 import 'package:blinking_text/blinking_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:otsappmobile/constants.dart';
-import 'package:otsappmobile/size_config.dart';
+import '../../../constants.dart';
+import '../../../size_config.dart';
 import 'top_statistics.dart';
 
 class Body extends StatelessWidget {

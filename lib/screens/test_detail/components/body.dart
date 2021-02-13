@@ -1,26 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:otsappmobile/components/default_button.dart';
-import 'package:otsappmobile/models/test_detail.dart';
-import 'package:otsappmobile/models/test_question_screen_model.dart';
-import 'package:otsappmobile/screens/test_question/test_question_screen.dart';
-import 'package:otsappmobile/size_config.dart';
+import 'package:otsappmobile/controllers/TestDetailController.dart';
 
+import '../../../components/default_button.dart';
+import '../../../models/test_question_screen_model.dart';
+import '../../../screens/test_question/test_question_screen.dart';
+import '../../../size_config.dart';
 import '../../../constants.dart';
 import 'test_detail_title_desc.dart';
 
 class Body extends StatefulWidget {
-  const Body({Key key, this.model}) : super(key: key);
-  final TestDetailModel model;
+  const Body({Key key, this.controller}) : super(key: key);
+  final TestDetailController controller;
 
   @override
-  _BodyState createState() => _BodyState(model);
+  _BodyState createState() => _BodyState();
 }
 
 class _BodyState extends State<Body> {
-  _BodyState(this.model);
-  final TestDetailModel model;
-
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -43,57 +40,83 @@ class _BodyState extends State<Body> {
               children: [
                 TestDetailTitleDesc(
                     title: "Ders",
-                    desc: model.lessons
-                        .firstWhere((x) => x.id == model.lessonId)
+                    desc: widget.controller.testDetail.lessons
+                        .firstWhere((x) =>
+                            x.id == widget.controller.testDetail.lessonId)
                         .name),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Konu",
-                    desc: model.lessonSubjects
-                        .firstWhere((x) => x.id == model.lessonSubjectId)
+                    desc: widget.controller.testDetail.lessonSubjects
+                        .firstWhere((x) =>
+                            x.id ==
+                            widget.controller.testDetail.lessonSubjectId)
                         .name),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
-                    title: "Soru Sayısı", desc: model.questionCount.toString()),
-                if (model.description != null)
+                    title: "Soru Sayısı",
+                    desc:
+                        widget.controller.testDetail.questionCount.toString()),
+                if (widget.controller.testDetail.description != null)
                   SizedBox(height: getProportionateScreenHeight(15)),
-                if (model.description != null)
+                if (widget.controller.testDetail.description != null)
                   TestDetailTitleDesc(
-                      title: "Açıklama", desc: model.description),
+                      title: "Açıklama",
+                      desc: widget.controller.testDetail.description),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Başlangıç Tarihi",
-                    desc:
-                        DateFormat("dd.MM.yyyy HH:mm").format(model.startDate)),
+                    desc: widget.controller.testInfo == null ? "-" : DateFormat("dd.MM.yyyy HH:mm")
+                        .format(widget.controller.testInfo.startDate)),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Bitiş Tarihi",
-                    desc: DateFormat("dd.MM.yyyy HH:mm").format(model.endDate)),
+                    desc: widget.controller.testInfo == null ? "-" : DateFormat("dd.MM.yyyy HH:mm")
+                        .format(widget.controller.testInfo.endDate)),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Oluşturan",
-                    desc: model.createdUser.userName +
+                    desc: widget.controller.testDetail.createdUser.userName +
                         " " +
-                        model.createdUser.userSurName),
-                Text(model.createdUser.email),
+                        widget.controller.testDetail.createdUser.userSurName),
+                Text(widget.controller.testDetail.createdUser.email),
               ],
             ),
           ),
         ),
-        Container(
-          alignment: Alignment.bottomCenter,
-          child: Padding(
-            padding: const EdgeInsets.all(20),
-            child: DefaultButton(
-              text: "Testi Başlat",
-              press: () => {
-                Navigator.popAndPushNamed(context, TestQuestionScreen.routeName,
-                    arguments: TestQuestionScreenModel(
-                        model.id, model.questionCount, model.name))
-              },
+        if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isBefore(DateTime.now()))
+          Container(child: Text("Teste katılım süreniz bitmiştir.", style: TextStyle(fontSize: 18),)),
+        if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isAfter(DateTime.now()))
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: DefaultButton(
+                text: "Testi Başlat",
+                press: () => {
+                  Navigator.popAndPushNamed(
+                      context, TestQuestionScreen.routeName,
+                      arguments: TestQuestionScreenModel(
+                          widget.controller.testDetail.id,
+                          widget.controller.testDetail.questionCount,
+                          widget.controller.testDetail.name))
+                },
+              ),
             ),
           ),
-        ),
+        if (widget.controller.testInfo.isCompleted)
+          Container(
+            alignment: Alignment.bottomCenter,
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: DefaultButton(
+                text: "Cevaplara Gözat",
+                press: () => {
+                  //TODO:test cevap detay
+                },
+              ),
+            ),
+          ),
       ],
     );
   }

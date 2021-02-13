@@ -1,12 +1,14 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/screens/test_home/test_home_screen.dart';
+import '../screens/test_home/test_home_screen.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../constants.dart';
 
 class BottomNavigatonBar extends StatelessWidget {
   const BottomNavigatonBar({
-    Key key, this.activeIndex,
+    Key key,
+    this.activeIndex,
   }) : super(key: key);
   final int activeIndex;
   @override
@@ -23,10 +25,15 @@ class BottomNavigatonBar extends StatelessWidget {
         TabItem(activeIcon: Icons.mail, icon: Icons.mail_outline_outlined),
         TabItem(activeIcon: Icons.person, icon: Icons.person_outlined),
       ],
-      onTap: (index) {
+      onTap: (index) async {
         switch (index) {
           case 2:
             Navigator.pushNamed(context, TestHomeScreen.routeName);
+            break;
+          case 4:
+            SharedPreferences prefs = await SharedPreferences.getInstance();
+            prefs.remove("email");
+            prefs.remove("password");
             break;
           default:
         }

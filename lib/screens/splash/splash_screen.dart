@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:otsappmobile/screens/splash/components/body.dart';
-import 'package:otsappmobile/size_config.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 
-class SplashScreen extends StatelessWidget {
+import '../../screens/splash/components/body.dart';
+import '../../size_config.dart';
+import '../../controllers/SplashController.dart';
+
+class SplashScreen extends StatefulWidget {
   static String routeName = "/splash";
+
+  @override
+  _SplashScreenState createState() => _SplashScreenState();
+}
+
+class _SplashScreenState extends StateMVC<SplashScreen> {
+  _SplashScreenState() : super(SplashController()) {
+    _controller = controller;
+  }
+  SplashController _controller;
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
@@ -15,7 +28,7 @@ class SplashScreen extends StatelessWidget {
       )
   );
     return Scaffold(
-      body: Body(),
+      body: Body(controller: _controller),
     );
   }
 }

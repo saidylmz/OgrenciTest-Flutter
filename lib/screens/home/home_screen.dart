@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/components/bottom_navigation_bar.dart';
 
+import '../../components/bottom_navigation_bar.dart';
 import 'components/body.dart';
+
 class HomeScreen extends StatefulWidget {
   static String routeName = "/home";
 
@@ -10,6 +11,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

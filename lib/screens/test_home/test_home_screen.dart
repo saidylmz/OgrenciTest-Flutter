@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/components/bottom_navigation_bar.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:otsappmobile/controllers/TestHomeController.dart';
+import '../../components/bottom_navigation_bar.dart';
 
 import 'components/body.dart';
 
-class TestHomeScreen extends StatelessWidget {
+class TestHomeScreen extends StatefulWidget {
   static String routeName = "/testhome";
+
+  @override
+  _TestHomeScreenState createState() => _TestHomeScreenState();
+}
+
+class _TestHomeScreenState extends StateMVC<TestHomeScreen> {
+  _TestHomeScreenState() : super(TestHomeController()) {
+    _controller = controller;
+  }
+  TestHomeController _controller;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -13,7 +26,7 @@ class TestHomeScreen extends StatelessWidget {
         title: Text("Testlerim"),
         centerTitle: true,
       ),
-      body: Body(),
+      body: Body(controller: _controller),
       bottomNavigationBar: BottomNavigatonBar(
         activeIndex: 2,
       ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:otsappmobile/routes.dart';
 import 'package:otsappmobile/screens/splash/splash_screen.dart';
 
@@ -9,14 +10,13 @@ void main() {
   runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends AppMVC {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppName,
       theme: theme(),
-      //home: SplashScreen(),
       initialRoute: SplashScreen.routeName,
       routes: routes,
     );

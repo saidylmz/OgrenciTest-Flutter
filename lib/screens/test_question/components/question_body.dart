@@ -1,49 +1,61 @@
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/models/test_question_model.dart';
-import 'package:otsappmobile/screens/test_question/components/question_card.dart';
+import 'package:flutter_html/flutter_html.dart';
+import 'package:otsappmobile/controllers/TestQuestionController.dart';
+import 'option.dart';
 
 class QuestionBody extends StatefulWidget {
   const QuestionBody({
     Key key,
-    this.questions, this.pageController, @required this.answers, @required this.press,
+    this.controller,
   }) : super(key: key);
-  final List<TestQuestionModel> questions;
-  final List<String> answers;
-  final PageController pageController;
-final ValueChanged<QBodyParameters> press;
+  final TestQuestionController controller;
   @override
   _QuestionBodyState createState() => _QuestionBodyState();
 }
 
 class _QuestionBodyState extends State<QuestionBody> {
+  var optionNames = ["A", "B", "C", "D", "E"];
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: PageView.builder(
-        controller: widget.pageController,
+        controller: widget.controller.pageController,
         physics: NeverScrollableScrollPhysics(),
-        // onPageChanged: (index) {
-        //   setState(() {
-        //     currentQuestion = index + 1;
-        //   });
-        // },
-        itemCount: widget.questions.length,
-        itemBuilder: (context, index) => SingleChildScrollView(
-          child: QuestionCard(
-            question: widget.questions[index],
-            selectedAnswer: widget.answers[index],
-            press: (value) {
-              widget.press(QBodyParameters(value,index));
-            },
-          ),
-        ),
+        itemCount: widget.controller.questions.length,
+        itemBuilder: (context, index) {
+          var optKeys = List.generate(optionNames.length, (index) => GlobalKey());
+          return SingleChildScrollView(
+            child: Column(
+              children: [
+                Html(data: widget.controller.questions[index].questionBody),
+                SizedBox(height: 10),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    children: [
+                      for (var i = 0; i < optionNames.length; i++)
+                        Option(
+                          key: optKeys[i],
+                          text: widget.controller.questions[index]
+                              .toJson()["Question" + optionNames[i]],
+                          name: optionNames[i],
+                          index: index,
+                          controller: widget.controller,
+                          press: () {
+                            widget.controller.setAnswer(index, optionNames[i]);
+                            for (var item in optKeys) {
+                              item.currentState.setState(() {});
+                            }
+                          },
+                        ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          );
+        },
       ),
     );
   }
-}
-
-class QBodyParameters{
-  String value;
-  int index;
-  QBodyParameters(this.value,this.index);
 }

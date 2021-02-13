@@ -18,10 +18,7 @@ class TestDetailModel {
         this.isActive,
         this.lessons,
         this.lessonSubjects,
-        this.testQuestions,
-        this.startDate,
-        this.endDate,
-        this.isComplete
+        this.testQuestions
     });
 
     int id;
@@ -30,13 +27,10 @@ class TestDetailModel {
     int createdUserId;
     CreatedUser createdUser;
     DateTime createdAt;
-    DateTime startDate;
-    DateTime endDate;
     int questionCount;
     int lessonId;
     int lessonSubjectId;
     bool isActive;
-    bool isComplete;
     List<Lesson> lessons;
     List<Lesson> lessonSubjects;
     List<TestQuestion> testQuestions;

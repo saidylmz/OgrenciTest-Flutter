@@ -1,28 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:otsappmobile/constants.dart';
-import 'package:otsappmobile/models/get_user_test_model.dart';
-import 'package:otsappmobile/services/test_service.dart';
+import 'package:otsappmobile/controllers/TestHomeController.dart';
+import '../../../services/test_service.dart';
 import 'course_content.dart';
 
-GetUserTest model;
+TestHomeController _controller;
 
 class Body extends StatefulWidget {
+  final TestHomeController controller;
+
+  const Body({Key key, this.controller}) : super(key: key);
   @override
-  _BodyState createState() => _BodyState();
+  _BodyState createState() {
+    _controller = controller;
+    return _BodyState();
+  }
 }
 
 class _BodyState extends State<Body> {
-  @override
-  void initState() {
-    super.initState();
-    model = GetUserTest(
-        endDate: DateTime.now().add(Duration(days: 365)),
-        startDate: DateTime.now().add(Duration(days: -365)),
-        lessonId: -1,
-        lessonSubjectId: -1,
-        studentId: sUserID);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,56 +25,97 @@ class _BodyState extends State<Body> {
         image: DecorationImage(
             image: AssetImage("assets/images/ux_big.png"),
             alignment: Alignment.topRight,
-            scale: 1.6),
+            scale: 1.7),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Padding(
-            padding: EdgeInsets.only(left: 20, top: 10, right: 20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text("Günlük Çözülen Soru"),
-                SizedBox(height: 16),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                    ),
-                    Text("100"),
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.dangerous,
-                      color: Colors.red,
-                    ),
-                    Text("50"),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Text("Toplam Çözülen Test"),
-                SizedBox(height: 16),
-                Row(
-                  children: <Widget>[
-                    Icon(
-                      Icons.check_circle,
-                      color: Colors.green,
-                    ),
-                    Text("100"),
-                    SizedBox(width: 10),
-                    Icon(
-                      Icons.dangerous,
-                      color: Colors.red,
-                    ),
-                    Text("50"),
-                  ],
-                ),
-              ],
+          if (_controller.testAnswerStatistic != null)
+            Padding(
+              padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text("Günlük Çözülen Soru"),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
+                      Text(_controller.testAnswerStatistic.dayCorrect
+                          .toString()),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.dangerous,
+                        color: Colors.red,
+                      ),
+                      Text(_controller.testAnswerStatistic.dayWrong.toString()),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.help_outlined,
+                        color: Colors.blue,
+                      ),
+                      Text(_controller.testAnswerStatistic.dayEmpty.toString()),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text("Haftalık Çözülen Soru"),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
+                      Text(_controller.testAnswerStatistic.weekCorrect
+                          .toString()),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.dangerous,
+                        color: Colors.red,
+                      ),
+                      Text(
+                          _controller.testAnswerStatistic.weekWrong.toString()),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.help_outlined,
+                        color: Colors.blue,
+                      ),
+                      Text(
+                          _controller.testAnswerStatistic.weekEmpty.toString()),
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Text("Toplam Çözülen Test"),
+                  Row(
+                    children: <Widget>[
+                      Icon(
+                        Icons.check_circle,
+                        color: Colors.green,
+                      ),
+                      Text(_controller.testAnswerStatistic.totalCorrect
+                          .toString()),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.dangerous,
+                        color: Colors.red,
+                      ),
+                      Text(_controller.testAnswerStatistic.totalWrong
+                          .toString()),
+                      SizedBox(width: 10),
+                      Icon(
+                        Icons.help_outlined,
+                        color: Colors.blue,
+                      ),
+                      Text(_controller.testAnswerStatistic.totalEmpty
+                          .toString()),
+                    ],
+                  ),
+                ],
+              ),
             ),
-          ),
           SizedBox(
-            height: 70,
+            height: 50,
           ),
           Container(
             padding: EdgeInsets.only(left: 35, top: 20),
@@ -122,7 +158,7 @@ class _BodyState extends State<Body> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           FutureBuilder(
-                            future: TestService().getUserTests(model),
+                            future: TestService().getUserTests(sUserID),
                             builder: (context, snapshot) => snapshot.hasData
                                 ? CourseContent(model: snapshot.data)
                                 : Center(

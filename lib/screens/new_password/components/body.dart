@@ -1,20 +1,26 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
-import 'package:otsappmobile/components/custom_suffix_icon.dart';
-import 'package:otsappmobile/components/default_button.dart';
-import 'package:otsappmobile/components/form_error.dart';
-import 'package:otsappmobile/screens/login/login_screen.dart';
-import 'package:otsappmobile/size_config.dart';
 
+import '../../../components/custom_suffix_icon.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../controllers/NewPasswordController.dart';
+import '../../../screens/login/login_screen.dart';
+import '../../../size_config.dart';
 import '../../../constants.dart';
-import '../../../models/new_password_model.dart';
 import '../../../services/user_service.dart';
 
-NewPasswordModel model;
+NewPasswordController _controller;
 
 class Body extends StatelessWidget {
+  final NewPasswordController controller;
+
+  const Body({Key key, this.controller}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    model = ModalRoute.of(context).settings.arguments as NewPasswordModel;
+    _controller = controller;
+    _controller.setModelFromArgument(ModalRoute.of(context).settings.arguments);
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -44,40 +50,29 @@ class NewPassForm extends StatefulWidget {
 }
 
 class _NewPassFormState extends State<NewPassForm> {
-  final _formKey = GlobalKey<FormState>();
-  List<String> errors = [];
-  String oldPass, newPass, confirmPass;
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: _controller.formKey,
       child: Column(
         children: [
-          if (!model.isCoded)
+          if (!_controller.model.isCoded)
             TextFormField(
               obscureText: true,
-              onSaved: (newValue) => oldPass = newValue,
+              onSaved: (newValue) => _controller.oldPass = newValue,
               onChanged: (value) {
-                if (value.isNotEmpty && errors.contains(kOldPassNullError)) {
-                  setState(() {
-                    errors.remove(kOldPassNullError);
-                  });
+                if (value.isNotEmpty &&
+                    _controller.errors.contains(kOldPassNullError)) {
+                  _controller.removeError(kOldPassNullError);
                 }
-                if (errors.length == 0)
-                  return null;
-                else
-                  return "";
+                return _controller.errors.length == 0 ? null : "";
               },
               validator: (value) {
-                if (value.isEmpty && !errors.contains(kOldPassNullError)) {
-                  setState(() {
-                    errors.add(kOldPassNullError);
-                  });
+                if (value.isEmpty &&
+                    !_controller.errors.contains(kOldPassNullError)) {
+                  _controller.addError(kOldPassNullError);
                 }
-                if (errors.length == 0)
-                  return null;
-                else
-                  return "";
+                return _controller.errors.length == 0 ? null : "";
               },
               decoration: InputDecoration(
                 labelText: "Eski Şifreniz",
@@ -93,31 +88,21 @@ class _NewPassFormState extends State<NewPassForm> {
           SizedBox(height: getProportionateScreenHeight(20)),
           TextFormField(
             obscureText: true,
-            onSaved: (newValue) => newPass = newValue,
+            onSaved: (newValue) => _controller.newPass = newValue,
             onChanged: (value) {
-              setState(() {
-                confirmPass = value;
-              });
-              if (value.isNotEmpty && errors.contains(kNewPassNullError)) {
-                setState(() {
-                  errors.remove(kNewPassNullError);
-                });
+              _controller.confirmPass = value;
+              if (value.isNotEmpty &&
+                  _controller.errors.contains(kNewPassNullError)) {
+                _controller.removeError(kNewPassNullError);
               }
-              if (errors.length == 0)
-                return null;
-              else
-                return "";
+              return _controller.errors.length == 0 ? null : "";
             },
             validator: (value) {
-              if (value.isEmpty && !errors.contains(kNewPassNullError)) {
-                setState(() {
-                  errors.add(kNewPassNullError);
-                });
+              if (value.isEmpty &&
+                  !_controller.errors.contains(kNewPassNullError)) {
+                _controller.addError(kNewPassNullError);
               }
-              if (errors.length == 0)
-                return null;
-              else
-                return "";
+              return _controller.errors.length == 0 ? null : "";
             },
             decoration: InputDecoration(
               labelText: "Yeni Şifre",
@@ -134,48 +119,30 @@ class _NewPassFormState extends State<NewPassForm> {
           TextFormField(
             obscureText: true,
             onChanged: (value) {
-              if (value.isNotEmpty && errors.contains(kNewPassNullError)) {
-                setState(() {
-                  errors.remove(kNewPassNullError);
-                });
-                
+              if (value.isNotEmpty &&
+                  _controller.errors.contains(kNewPassNullError)) {
+                _controller.removeError(kNewPassNullError);
               }
-              if (value != confirmPass &&
-                    !errors.contains(kNewPassNotMatchError)) {
-                  setState(() {
-                    errors.add(kNewPassNotMatchError);
-                  });
-                } else {
-                  setState(() {
-                    errors.remove(kNewPassNotMatchError);
-                  });
-                }
-              if (errors.length == 0)
-                return null;
-              else
-                return "";
+              if (value != _controller.confirmPass &&
+                  !_controller.errors.contains(kNewPassNotMatchError)) {
+                _controller.addError(kNewPassNotMatchError);
+              } else if (value == _controller.confirmPass) {
+                _controller.removeError(kNewPassNotMatchError);
+              }
+              return _controller.errors.length == 0 ? null : "";
             },
             validator: (value) {
-              if (value.isNotEmpty && errors.contains(kNewPassNullError)) {
-                setState(() {
-                  errors.remove(kNewPassNullError);
-                });
-                
+              if (value.isNotEmpty &&
+                  _controller.errors.contains(kNewPassNullError)) {
+                _controller.removeError(kNewPassNullError);
               }
-              if (value != confirmPass &&
-                    !errors.contains(kNewPassNotMatchError)) {
-                  setState(() {
-                    errors.add(kNewPassNotMatchError);
-                  });
-                } else {
-                  setState(() {
-                    errors.remove(kNewPassNotMatchError);
-                  });
-                }
-              if (errors.length == 0)
-                return null;
-              else
-                return "";
+              if (value != _controller.confirmPass &&
+                  !_controller.errors.contains(kNewPassNotMatchError)) {
+                _controller.addError(kNewPassNotMatchError);
+              } else if (value == _controller.confirmPass) {
+                _controller.removeError(kNewPassNotMatchError);
+              }
+              return _controller.errors.length == 0 ? null : "";
             },
             decoration: InputDecoration(
               labelText: "Yeni Şifre Tekrar",
@@ -189,27 +156,40 @@ class _NewPassFormState extends State<NewPassForm> {
             ),
           ),
           SizedBox(height: getProportionateScreenHeight(10)),
-          FormError(errors: errors),
+          FormError(errors: _controller.errors),
           SizedBox(height: SizeConfig.screenHeight * 0.1),
           DefaultButton(
-              text: "Gönder",
-              press: () {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  if (model.isCoded) {
-                    UserService().updatePassword(model.email, oldPass, newPass);
-                    Navigator.pushNamed(context, LoginScreen.routeName);
+            text: "Gönder",
+            press: () async {
+              if (_controller.formKey.currentState.validate()) {
+                _controller.formKey.currentState.save();
+                if (_controller.model.isCoded) {
+                  var res = await UserService().updatePassword(
+                      _controller.model.email,
+                      _controller.oldPass,
+                      _controller.newPass);
+                  infoDialog(
+                    context,
+                    res,
+                    title: "Şifre Değişikliği",
+                    closeOnBackPress: false,
+                    showNeutralButton: false,
+                    positiveText: "Tamam",
+                    positiveAction: () {
+                      Navigator.pushNamedAndRemoveUntil(
+                          context, LoginScreen.routeName, (r) => false);
+                    },
+                  );
+                } else {
+                  //TODO:Eski şifre ile değiştirme
+                  if (_controller.oldPass == "12345") {
                   } else {
-                    //TODO:Eski şifre ile değiştirme
-                    if (oldPass == "12345") {
-                    } else {
-                      setState(() {
-                        errors.add("apiden gelen");
-                      });
-                    }
+                    _controller.addError("apiden gelen");
                   }
                 }
-              })
+              }
+            },
+          )
         ],
       ),
     );

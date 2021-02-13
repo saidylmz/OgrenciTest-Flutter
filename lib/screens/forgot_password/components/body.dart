@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:otsappmobile/components/custom_suffix_icon.dart';
-import 'package:otsappmobile/components/default_button.dart';
-import 'package:otsappmobile/components/form_error.dart';
-import 'package:otsappmobile/screens/new_password/new_password.dart';
-import 'package:otsappmobile/size_config.dart';
+import 'package:otsappmobile/controllers/ForgotPasswordController.dart';
 
+import '../../../components/custom_suffix_icon.dart';
+import '../../../components/default_button.dart';
+import '../../../components/form_error.dart';
+import '../../../models/new_password_model.dart';
+import '../../../screens/new_password/new_password.dart';
+import '../../../size_config.dart';
 import '../../../constants.dart';
 import '../../../services/user_service.dart';
-import '../../../models/new_password_model.dart';
+
+ForgotPasswordController _controller;
 
 class Body extends StatelessWidget {
+  final ForgotPasswordController controller;
+
+  const Body({Key key, this.controller}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
+    _controller = controller;
     return SingleChildScrollView(
       child: Padding(
         padding:
@@ -46,50 +54,34 @@ class ForgotPassForm extends StatefulWidget {
 }
 
 class _ForgotPassFormState extends State<ForgotPassForm> {
-  final _formKey = GlobalKey<FormState>();
-  List<String> errors = [];
-  String email, buttonText = "Gönder", code = "", getCode;
-  bool codeSended = false;
   @override
   Widget build(BuildContext context) {
     return Form(
-      key: _formKey,
+      key: _controller.formKey,
       child: Column(
         children: [
           TextFormField(
             keyboardType: TextInputType.emailAddress,
-            onSaved: (newValue) => email = newValue,
+            onSaved: (newValue) => _controller.email = newValue,
             onChanged: (value) {
-              if (value.isNotEmpty && errors.contains(kEmailNullError)) {
-                setState(() {
-                  errors.remove(kEmailNullError);
-                });
+              if (value.isNotEmpty &&
+                  _controller.errors.contains(kEmailNullError)) {
+                _controller.removeError(kEmailNullError);
               } else if (emailValidatorRegExp.hasMatch(value) &&
-                  errors.contains(kInvalidEmailError)) {
-                setState(() {
-                  errors.remove(kInvalidEmailError);
-                });
+                  _controller.errors.contains(kInvalidEmailError)) {
+                _controller.removeError(kInvalidEmailError);
               }
-              if (errors.length == 0)
-                return null;
-              else
-                return "";
+              return _controller.errors.length == 0 ? null : "";
             },
             validator: (value) {
-              if (value.isEmpty && !errors.contains(kEmailNullError)) {
-                setState(() {
-                  errors.add(kEmailNullError);
-                });
+              if (value.isEmpty &&
+                  !_controller.errors.contains(kEmailNullError)) {
+                _controller.addError(kEmailNullError);
               } else if (!emailValidatorRegExp.hasMatch(value) &&
-                  !errors.contains(kInvalidEmailError)) {
-                setState(() {
-                  errors.add(kInvalidEmailError);
-                });
+                  !_controller.errors.contains(kInvalidEmailError)) {
+                _controller.addError(kInvalidEmailError);
               }
-              if (errors.length == 0)
-                return null;
-              else
-                return "";
+              return _controller.errors.length == 0 ? null : "";
             },
             decoration: InputDecoration(
               labelText: "Email",
@@ -103,17 +95,15 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
             ),
           ),
           SizedBox(height: getProportionateScreenHeight(20)),
-          if (codeSended)
+          if (_controller.codeSended)
             TextFormField(
               keyboardType: TextInputType.number,
               inputFormatters: <TextInputFormatter>[
                 FilteringTextInputFormatter.digitsOnly
               ],
               maxLength: 5,
-              onChanged: (value) {
-                setState(() {
-                  code = value;
-                });
+              onSaved: (value) {
+                _controller.code = value;
               },
               decoration: InputDecoration(
                 labelText: "Doğrulama Kodu",
@@ -128,49 +118,48 @@ class _ForgotPassFormState extends State<ForgotPassForm> {
               ),
             ),
           SizedBox(height: getProportionateScreenHeight(10)),
-          FormError(errors: errors),
+          FormError(errors: _controller.errors),
           SizedBox(height: SizeConfig.screenHeight * 0.1),
           DefaultButton(
-            text: buttonText,
+            text: _controller.buttonText,
             press: () async {
-              
-              if (!codeSended) {
-                if (_formKey.currentState.validate()) {
-                  _formKey.currentState.save();
-                  String result = await UserService().sendPasswordCode(email);
-                  
+              if (!_controller.codeSended) {
+                if (_controller.formKey.currentState.validate()) {
+                  _controller.formKey.currentState.save();
+                  String result =
+                      await UserService().sendPasswordCode(_controller.email);
+
                   if (result.isNotEmpty) {
                     setState(() {
-                      codeSended = true;
-                      buttonText = "Kodu Doğrula";
-                      getCode = result;
+                      _controller.buttonText = "Kodu Doğrula";
                     });
+                    _controller.codeSended = true;
+                    _controller.getCode = result;
                   }
                 } else {
+                  _controller.codeSended = false;
                   setState(() {
-                    codeSended = false;
-                    buttonText = "Gönder";
+                    _controller.buttonText = "Gönder";
                   });
                 }
               } else {
-                if (code != null && code.isNotEmpty) {
-                  errors.remove(kPassCodeNullError);
-                  if (code == getCode && getCode != null && getCode.isNotEmpty) {
+                _controller.formKey.currentState.save();
+                if (_controller.code != null && _controller.code.isNotEmpty) {
+                  _controller.removeError(kPassCodeNullError);
+                  if (_controller.code == _controller.getCode &&
+                      _controller.getCode != null &&
+                      _controller.getCode.isNotEmpty) {
                     Navigator.pushNamed(context, NewPasswordScreen.routeName,
-                        arguments: NewPasswordModel(true, email));
+                        arguments: NewPasswordModel(true, _controller.email));
                   } else {
-                    setState(() {
-                      if (!errors.contains(kPassCodeValidError)) {
-                        errors.add(kPassCodeValidError);
-                      }
-                    });
+                    if (!_controller.errors.contains(kPassCodeValidError)) {
+                      _controller.addError(kPassCodeValidError);
+                    }
                   }
                 } else {
-                  setState(() {
-                    if (!errors.contains(kPassCodeNullError)) {
-                      errors.add(kPassCodeNullError);
-                    }
-                  });
+                  if (!_controller.errors.contains(kPassCodeNullError)) {
+                    _controller.addError(kPassCodeNullError);
+                  }
                 }
               }
             },
