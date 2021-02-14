@@ -28,6 +28,7 @@ class TestQuestionController extends ControllerMVC {
           createdAt: DateTime.now(),
           testQuestionId: questionIds[index],
           userId: sUserID,
+          testId: testId,
         ),
       ),
     );

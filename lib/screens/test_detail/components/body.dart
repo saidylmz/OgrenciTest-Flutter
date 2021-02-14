@@ -86,7 +86,7 @@ class _BodyState extends State<Body> {
         ),
         if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isBefore(DateTime.now()))
           Container(child: Text("Teste katılım süreniz bitmiştir.", style: TextStyle(fontSize: 18),)),
-        if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isAfter(DateTime.now()))
+        //if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isAfter(DateTime.now()))
           Container(
             alignment: Alignment.bottomCenter,
             child: Padding(

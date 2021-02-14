@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:otsappmobile/models/user_statistic_model.dart';
 
 import '../models/user_model.dart';
 import '../constants.dart';
@@ -37,5 +38,15 @@ class UserService {
     );
     if (response.statusCode == 200) return userModelFromJson(response.body);
     return UserModel();
+  }
+  Future<UserStatisticModel> getUserStatistic() async {
+    final response = await client.post(
+      "$apiUrl/UserTests/GetUserStatistic",
+      headers: {"content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken },
+      body: (json.encode({"value": sUserID})),
+    );
+    if (response.statusCode == 200) return userStatisticModelFromJson(response.body);
+    return null;
   }
 }
