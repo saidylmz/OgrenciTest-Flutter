@@ -47,16 +47,16 @@ class _QuestionBottomBarState extends State<QuestionBottomBar> {
         FlatButton(
           padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenWidth(
-                  widget.controller.currentQuestion < widget.controller.testQuestionCount ? 25 : 40)),
+                  widget.controller.currentQuestion < widget.controller.questions.length ? 25 : 40)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          color: widget.controller.currentQuestion < widget.controller.testQuestionCount ? kPrimaryColor : Colors.blue,
+          color: widget.controller.currentQuestion < widget.controller.questions.length ? kPrimaryColor : Colors.blue,
           onPressed: () {
-            if (widget.controller.currentQuestion < widget.controller.testQuestionCount) {
+            if (widget.controller.currentQuestion < widget.controller.questions.length) {
               widget.controller.pageController.nextPage(
                   duration: Duration(milliseconds: 250), curve: Curves.ease);
-              if (widget.controller.currentQuestion < widget.controller.testQuestionCount)
+              if (widget.controller.currentQuestion < widget.controller.questions.length)
                 widget.controller.updateCurrentQuestion(1);
             } else {
               confirmationDialog(
@@ -75,7 +75,7 @@ class _QuestionBottomBarState extends State<QuestionBottomBar> {
             }
           },
           child: Text(
-            widget.controller.currentQuestion < widget.controller.testQuestionCount ? "Sonraki Soru" : "Testi Bitir",
+            widget.controller.currentQuestion < widget.controller.questions.length ? "Sonraki Soru" : "Testi Bitir",
             style: TextStyle(
               fontSize: getProportionateScreenWidth(18),
               color: Colors.white,

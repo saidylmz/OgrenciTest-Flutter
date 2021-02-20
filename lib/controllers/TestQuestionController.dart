@@ -11,7 +11,6 @@ class TestQuestionController extends ControllerMVC {
 
   List<TestQuestionModel> questions;
   int testId;
-  int testQuestionCount;
   int currentQuestion = 1;
   String name;
   List<String> answers;
@@ -22,7 +21,7 @@ class TestQuestionController extends ControllerMVC {
   saveTestQuestions() {
     TestService().addTestAnswers(
       List<TestAnswerModel>.generate(
-        testQuestionCount,
+        questions.length,
         (index) => TestAnswerModel(
           answer: answers[index],
           createdAt: DateTime.now(),

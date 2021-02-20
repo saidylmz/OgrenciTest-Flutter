@@ -7,6 +7,7 @@ import '../../../models/test_question_screen_model.dart';
 import '../../../screens/test_question/test_question_screen.dart';
 import '../../../size_config.dart';
 import '../../../constants.dart';
+import '../../test_answers/test_answers_screen.dart';
 import 'test_detail_title_desc.dart';
 
 class Body extends StatefulWidget {
@@ -66,13 +67,17 @@ class _BodyState extends State<Body> {
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Başlangıç Tarihi",
-                    desc: widget.controller.testInfo == null ? "-" : DateFormat("dd.MM.yyyy HH:mm")
-                        .format(widget.controller.testInfo.startDate)),
+                    desc: widget.controller.testInfo == null
+                        ? "-"
+                        : DateFormat("dd.MM.yyyy HH:mm")
+                            .format(widget.controller.testInfo.startDate)),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Bitiş Tarihi",
-                    desc: widget.controller.testInfo == null ? "-" : DateFormat("dd.MM.yyyy HH:mm")
-                        .format(widget.controller.testInfo.endDate)),
+                    desc: widget.controller.testInfo == null
+                        ? "-"
+                        : DateFormat("dd.MM.yyyy HH:mm")
+                            .format(widget.controller.testInfo.endDate)),
                 SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Oluşturan",
@@ -84,9 +89,15 @@ class _BodyState extends State<Body> {
             ),
           ),
         ),
-        if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isBefore(DateTime.now()))
-          Container(child: Text("Teste katılım süreniz bitmiştir.", style: TextStyle(fontSize: 18),)),
-        //if (!widget.controller.testInfo.isCompleted && widget.controller.testInfo.endDate.isAfter(DateTime.now()))
+        if (!widget.controller.testInfo.isCompleted &&
+            widget.controller.testInfo.endDate.isBefore(DateTime.now()))
+          Container(
+              child: Text(
+            "Teste katılım süreniz bitmiştir.",
+            style: TextStyle(fontSize: 18),
+          )),
+        if (!widget.controller.testInfo.isCompleted &&
+            widget.controller.testInfo.endDate.isAfter(DateTime.now()))
           Container(
             alignment: Alignment.bottomCenter,
             child: Padding(
@@ -98,7 +109,6 @@ class _BodyState extends State<Body> {
                       context, TestQuestionScreen.routeName,
                       arguments: TestQuestionScreenModel(
                           widget.controller.testDetail.id,
-                          widget.controller.testDetail.questionCount,
                           widget.controller.testDetail.name))
                 },
               ),
@@ -112,7 +122,11 @@ class _BodyState extends State<Body> {
               child: DefaultButton(
                 text: "Cevaplara Gözat",
                 press: () => {
-                  //TODO:test cevap detay
+                  Navigator.pushNamed(context, TestAnswersScreen.routeName,
+                      arguments: TestQuestionScreenModel(
+                        widget.controller.testDetail.id,
+                        widget.controller.testDetail.name,
+                      ))
                 },
               ),
             ),

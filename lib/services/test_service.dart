@@ -100,4 +100,19 @@ class TestService {
     }
     return null;
   }
+
+  Future<List<TestAnswerModel>> getTestUserAnswers(int testId) async {
+    final response = await client.post(
+      "$apiUrl/TestQuestions/GetTestUserAnswers",
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
+      body: (json.encode({"value": sUserID, "value2": testId})),
+    );
+    if (response.statusCode == 200) {
+      return testAnswerModelFromJson(response.body);
+    }
+    return null;
+  }
 }

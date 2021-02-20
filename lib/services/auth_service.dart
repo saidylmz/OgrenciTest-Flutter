@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:commons/commons.dart';
 import 'package:http/http.dart' show Client;
 
 import '../models/login_model.dart';
@@ -13,7 +14,6 @@ class AuthService {
       headers: {"content-type": "application/json"},
       body: (json.encode({ "Email": email, "Password": password })),
     );
-      print(response.body);
     if (response.statusCode == 200) {
       return loginModelFromJson(response.body);
     } else {

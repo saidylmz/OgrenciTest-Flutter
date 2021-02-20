@@ -1,6 +1,5 @@
 class TestQuestionScreenModel {
-  TestQuestionScreenModel(this.testId, this.testQuestionCount, this.name);
+  TestQuestionScreenModel(this.testId, this.name);
   int testId;
-  int testQuestionCount;
   String name;
 }

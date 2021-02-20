@@ -39,7 +39,7 @@ class _QuestionTopBarState extends State<QuestionTopBar> {
               Padding(
                 padding: const EdgeInsets.only(right: 15),
                 child: Text(
-                  "/" + widget.controller.testQuestionCount.toString(),
+                  "/" + widget.controller.questions.length.toString(),
                   style: TextStyle(
                       color: Colors.black,
                       fontWeight: FontWeight.bold,

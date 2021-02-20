@@ -1,5 +1,6 @@
 import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
+import 'package:otsappmobile/screens/messages/messages_screen.dart';
 import '../screens/test_home/test_home_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -29,6 +30,9 @@ class BottomNavigatonBar extends StatelessWidget {
         switch (index) {
           case 2:
             Navigator.pushNamed(context, TestHomeScreen.routeName);
+            break;
+            case 3:
+            Navigator.pushNamed(context, MessagesScreen.routeName);
             break;
           case 4:
             SharedPreferences prefs = await SharedPreferences.getInstance();

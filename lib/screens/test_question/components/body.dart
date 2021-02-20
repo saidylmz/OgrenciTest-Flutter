@@ -27,38 +27,36 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.all(getProportionateScreenWidth(15)),
-      child: Column(
-        children: [
-          QuestionTopBar(
-            key: _controller.topBar,
-            controller: _controller,
-          ),
-          FutureBuilder(
-            future: TestService().getTestQuestions(_controller.testId),
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                var testQs = snapshot.data as List<TestQuestionModel>;
-                _controller.testQuestionCount = testQs.length;
-                _controller.answers =
-                    List.filled(_controller.testQuestionCount, "");
-                _controller.questionIds = List();
-                testQs.forEach((element) {
-                  _controller.questionIds.add(element.id);
-                });
-                _controller.questions = testQs;
-                return QuestionBody(
+      child: FutureBuilder(
+        future: TestService().getTestQuestions(_controller.testId),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            var testQs = snapshot.data as List<TestQuestionModel>;
+            _controller.answers = List.filled(_controller.questions.length, "");
+            _controller.questionIds = List();
+            testQs.forEach((element) {
+              _controller.questionIds.add(element.id);
+            });
+            _controller.questions = testQs;
+            return Column(
+              children: [
+                QuestionTopBar(
+                  key: _controller.topBar,
                   controller: _controller,
-                );
-              } else
-                return Center(child: Image.asset("assets/images/spinner.gif"));
-            },
-          ),
-          SizedBox(height: getProportionateScreenHeight(20)),
-          QuestionBottomBar(
-            key: _controller.bottomBar,
-            controller: _controller,
-          ),
-        ],
+                ),
+                QuestionBody(
+                  controller: _controller,
+                ),
+                SizedBox(height: getProportionateScreenHeight(20)),
+                QuestionBottomBar(
+                  key: _controller.bottomBar,
+                  controller: _controller,
+                ),
+              ],
+            );
+          } else
+            return Center(child: Image.asset("assets/images/spinner.gif"));
+        },
       ),
     );
   }
