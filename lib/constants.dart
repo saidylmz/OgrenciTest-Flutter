@@ -28,7 +28,7 @@ const kPrimaryGradient = LinearGradient(
 
 const String AppName = "TEST Takip";
 
-const String apiUrl = "http://192.168.2.241:45455/api";
+const String apiUrl = "http://192.168.2.241:45456/api";
 
 const defaultDuration = Duration(milliseconds: 250);
 
