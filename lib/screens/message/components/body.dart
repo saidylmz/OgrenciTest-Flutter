@@ -1,5 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:otsappmobile/constants.dart';
 import 'package:otsappmobile/controllers/MessageController.dart';
+import 'package:otsappmobile/services/firestore_service.dart';
+import 'package:otsappmobile/size_config.dart';
 
 import 'chat_user_list.dart';
 
@@ -11,128 +15,105 @@ class Body extends StatefulWidget {
   _BodyState createState() => _BodyState();
 }
 
-class ChatUsers {
-  String text;
-  String secondaryText;
-  String image;
-  String time;
-  ChatUsers(
-      {@required this.text,
-      @required this.secondaryText,
-      @required this.image,
-      @required this.time});
-}
-
-String searchText ="";
-
-List<ChatUsers> chatUsers = [
-  ChatUsers(
-      text: "Jane Russel",
-      secondaryText: "Awesome Setup",
-      image: "assets/images/Profile Image.png",
-      time: "Now"),
-  ChatUsers(
-      text: "Glady's Murphy",
-      secondaryText: "That's Great",
-      image: "assets/images/Profile Image.png",
-      time: "Yesterday"),
-  ChatUsers(
-      text: "Jorge Henry",
-      secondaryText: "Hey where are you?",
-      image: "assets/images/Profile Image.png",
-      time: "31 Mar"),
-  ChatUsers(
-      text: "Philip Fox",
-      secondaryText: "Busy! Call me in 20 mins",
-      image: "assets/images/Profile Image.png",
-      time: "28 Mar"),
-  ChatUsers(
-      text: "Debra Hawkins",
-      secondaryText: "Thankyou, It's awesome",
-      image: "assets/images/Profile Image.png",
-      time: "23 Mar"),
-  ChatUsers(
-      text: "Jacob Pena",
-      secondaryText: "will update you in evening",
-      image: "assets/images/Profile Image.png",
-      time: "17 Mar"),
-  ChatUsers(
-      text: "Andrey Jones",
-      secondaryText: "Can you please share the file?",
-      image: "assets/images/Profile Image.png",
-      time: "24 Feb"),
-  ChatUsers(
-      text: "John Wick",
-      secondaryText: "How are you?",
-      image: "assets/images/Profile Image.png",
-      time: "18 Feb"),
-];
-
 class _BodyState extends State<Body> {
-  List<ChatUsers> list = chatUsers;
+  @override
+  void initState() {
+    super.initState();
+    //widget.controller.loadChats();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      physics: BouncingScrollPhysics(),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
-          SafeArea(
-            child: Padding(
-              padding: EdgeInsets.only(left: 16, right: 16, top: 10),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      onChanged: (value){
-                        setState(() {
-                          searchText = value;
-                          list = searchText.isNotEmpty ? chatUsers.where((x) => x.text.toLowerCase().contains(searchText.toLowerCase())).toList() : chatUsers;
-                        });
-                      },
-                      decoration: InputDecoration(
-                        
-                        hintText: "Ara...",
-                        hintStyle: TextStyle(color: Colors.grey.shade400),
-                        contentPadding: EdgeInsets.only(left: 16, right: 16, top: 10),
-                        prefixIcon: Icon(
-                          Icons.search,
-                          color: Colors.grey.shade400,
-                          size: 20,
-                        ),
-                        filled: true,
-                        fillColor: Colors.grey.shade100,
-                        enabledBorder: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            borderSide:
-                                BorderSide(color: Colors.grey.shade100)),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: <Widget>[
+        SafeArea(
+          child: Padding(
+            padding: EdgeInsets.only(left: 16, right: 16, top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                Expanded(
+                  child: TextField(
+                    onChanged: (value) {
+                      widget.controller.searchText = value.toLowerCase();
+                      widget.controller.searchList();
+                    },
+                    decoration: InputDecoration(
+                      hintText: "Ara...",
+                      hintStyle: TextStyle(color: Colors.grey.shade400),
+                      contentPadding:
+                          EdgeInsets.only(left: 16, right: 16, top: 10),
+                      prefixIcon: Icon(
+                        Icons.search,
+                        color: Colors.grey.shade400,
+                        size: 20,
                       ),
+                      filled: true,
+                      fillColor: Colors.grey.shade100,
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(30),
+                          borderSide: BorderSide(color: Colors.grey.shade100)),
                     ),
                   ),
-                  
-                ],
-              ),
+                ),
+              ],
             ),
           ),
-          ListView.builder(
-            itemCount: list.length,
-            shrinkWrap: true,
-            padding: EdgeInsets.only(top: 16),
-            physics: NeverScrollableScrollPhysics(),
-            itemBuilder: (context, index) {
-              
-              return ChatUsersList(
-                text: list[index].text,
-                secondaryText: list[index].secondaryText,
-                image: list[index].image,
-                time: list[index].time,
-                isMessageRead: true,
+        ),
+        StreamBuilder(
+          stream: FirestoreService().getStreamUserChats(),
+          builder: (context, snapshot) {
+            if (snapshot.hasData) {
+              widget.controller.chatList =
+                  (snapshot.data.documents as List<QueryDocumentSnapshot>)
+                      .map((e) => FrChat.fromSnapshot2(e.id, e.data()))
+                      .toList();
+              widget.controller.chatList.sort(
+                  (a, b) => b.lastMessageDate.compareTo(a.lastMessageDate));
+              return ListView.builder(
+                itemCount: widget.controller.chatList.length,
+                shrinkWrap: true,
+                padding: EdgeInsets.only(top: 16),
+                physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics()),
+                itemBuilder: (c, i) {
+                  var toId = widget.controller.chatList[i].members
+                      .singleWhere((element) => element != sUserID);
+                  // var toUser = sFrUsers?.singleWhere(
+                  //     (element) => element.userId == toId,
+                  //     orElse: () => null);
+                  return StreamBuilder(
+                    stream: FirebaseFirestore.instance
+                        .collection("users")
+                        .where("userId", isEqualTo: toId)
+                        .snapshots(),
+                    builder: (c, s) {
+                      if (s.hasData) {
+                        var temp = (s.data.documents
+                                as List<QueryDocumentSnapshot>).first;
+                        var toUser = FrUser.fromSnapshot2(temp.id, temp.data());
+                        return ChatUsersList(
+                          chatId: widget.controller.chatList[i].documentId,
+                          name: toUser?.name ?? "",
+                          secondaryText:
+                              widget.controller.chatList[i].lastMessage,
+                          image: toUser?.photo ?? "",
+                          time: readDateTime(
+                              widget.controller.chatList[i].lastMessageDate),
+                          isUserOnline: toUser?.online,
+                        );
+                      }
+                      return Center(child: Image.asset("assets/images/spinner.gif"));
+                    },
+                  );
+                },
               );
-            },
-          ),
-        ],
-      ),
+            } else
+              return Center(child: Image.asset("assets/images/spinner.gif"));
+          },
+        )
+      ],
     );
   }
 }

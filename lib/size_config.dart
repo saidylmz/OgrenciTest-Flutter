@@ -1,3 +1,4 @@
+import 'package:commons/commons.dart';
 import 'package:flutter/material.dart';
 
 class SizeConfig {
@@ -27,4 +28,65 @@ double getProportionateScreenWidth(double inputWidth) {
   double screenWidth = SizeConfig.screenWidth;
   // 375 is the layout width that designer use
   return (inputWidth / 375.0) * screenWidth;
+}
+
+String readTimestamp(int timestamp) {
+  var now = DateTime.now();
+  var format = DateFormat('HH:mm a');
+  var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
+  var diff = now.difference(date);
+  var time = '';
+
+  if (diff.inSeconds <= 0 ||
+      diff.inSeconds > 0 && diff.inMinutes == 0 ||
+      diff.inMinutes > 0 && diff.inHours == 0 ||
+      diff.inHours > 0 && diff.inDays == 0) {
+    time = format.format(date);
+  } else if (diff.inDays > 0 && diff.inDays < 7) {
+    if (diff.inDays == 1) {
+      time = diff.inDays.toString() + ' Gün';
+    } else {
+      time = diff.inDays.toString() + ' Gün';
+    }
+  } else {
+    if (diff.inDays == 7) {
+      time = (diff.inDays / 7).floor().toString() + ' Hafta';
+    } else {
+      time = (diff.inDays / 7).floor().toString() + ' Hafta';
+    }
+  }
+
+  return time;
+}
+
+String readDateTime(DateTime dateTime) {
+  var now = DateTime.now();
+  var format = DateFormat('HH:mm');
+  var diff = now.difference(dateTime);
+  var time = '';
+
+  if (dateTime.day != now.day && dateTime.day+1 == now.day) {
+    time = "Dün " + format.format(dateTime);
+  } else if (diff.inSeconds <= 0 ||
+      diff.inSeconds > 0 && diff.inMinutes == 0 ||
+      diff.inMinutes > 0 && diff.inHours == 0 ||
+      diff.inHours > 0 && diff.inDays == 0) {
+    time = format.format(dateTime);
+  } else if (diff.inDays > 0 && diff.inDays < 7) {
+    if (diff.inDays == 1) {
+      time = diff.inDays.toString() + ' Gün';
+    } else {
+      time = diff.inDays.toString() + ' Gün';
+    }
+  }
+  //else {
+  //   if (diff.inDays == 7) {
+  //     time = (diff.inDays / 7).floor().toString() + ' Hafta';
+  //   } else {
+
+  //     time = (diff.inDays / 7).floor().toString() + ' Hafta';
+  //   }
+  // }
+
+  return time;
 }

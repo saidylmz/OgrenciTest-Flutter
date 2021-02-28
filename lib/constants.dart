@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'models/user_model.dart';
+import 'services/firestore_service.dart';
 import 'size_config.dart';
 
 const kPrimaryColor = Color(0xFFFF7643);
@@ -45,11 +46,12 @@ const String kOldPassValidError = "Eski şifreniz hatalıdır";
 const String kNewPassNotMatchError = "Girdiğiniz şifreler eşleşmemektedir";
 const String kNewPassNullError = "Lütfen yeni şifrenizi giriniz";
 
-//Storage Keys
+//Static Variables
 String sToken = "";
 int sUserID;
 DateTime sExpiration;
 UserModel sUser;
+List<FrUser> sFrUsers;
 
 final otpInputDecoration = InputDecoration(
   contentPadding:

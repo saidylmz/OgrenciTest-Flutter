@@ -1,4 +1,4 @@
-package com.example.otsappmobile
+package com.ss.otsapp
 
 import io.flutter.embedding.android.FlutterActivity
 

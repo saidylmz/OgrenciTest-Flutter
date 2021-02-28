@@ -38,8 +38,9 @@ dependencies:
   commons: ^0.7.8+3
   blinking_text: ^0.0.4+1
   mvc_pattern: ^6.6.4+2
-  firebase_core: ^0.7.0
-  firebase_database: ^6.0.0
+  firebase_core: ^0.5.0
+  firebase_database: ^4.0.0
+  cloud_firestore: ^0.14.0+2
 
 dev_dependencies:
   flutter_test:

@@ -232,15 +232,15 @@ class Body extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        if (controller.userStatistic.newMessageCount > 0)
-                          BlinkText(
-                            controller.userStatistic.newMessageCount
-                                    .toString() +
-                                ' Yeni Mesajınız Var!',
-                            style:
-                                TextStyle(fontSize: 20.0, color: kPrimaryColor),
-                            endColor: kSecondaryColor,
-                          ),
+                        // if (controller.userStatistic.newMessageCount > 0)
+                        //   BlinkText(
+                        //     controller.userStatistic.newMessageCount
+                        //             .toString() +
+                        //         ' Yeni Mesajınız Var!',
+                        //     style:
+                        //         TextStyle(fontSize: 20.0, color: kPrimaryColor),
+                        //     endColor: kSecondaryColor,
+                        //   ),
                         if (controller.userStatistic.newMessageCount == 0)
                           SizedBox(height: 20),
                         SizedBox(height: 5),

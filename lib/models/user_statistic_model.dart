@@ -28,7 +28,7 @@ class UserStatisticModel {
     int correctQuestionCount;
     int wrongQuestionCount;
     List<Test> tests;
-    int newMessageCount;
+    int newMessageCount = 0;
     String teacherFullName;
     int classroom;
     String classroomBranch;
