@@ -13,27 +13,31 @@ class MessageDetailScreen extends StatefulWidget {
   @override
   _MessageDetailScreenState createState() => _MessageDetailScreenState();
 }
-enum MessageType{
+
+enum MessageType {
   Sender,
   Receiver,
 }
 
 class _MessageDetailScreenState extends StateMVC<MessageDetailScreen> {
-   _MessageDetailScreenState() : super(MessageDetailController()) {
+  _MessageDetailScreenState() : super(MessageDetailController()) {
     _controller = controller;
   }
   MessageDetailController _controller;
 
   @override
   Widget build(BuildContext context) {
-    String chatId = ModalRoute.of(context).settings.arguments as String;
-    _controller.chatId = chatId;
-    _controller.loadChatInfo(chatId);
+    var arg = ModalRoute.of(context).settings.arguments;
+    if (arg is String) {
+      String chatId = arg;
+      _controller.chatId = chatId;
+      _controller.loadChatInfo(chatId);
+    }else{
+      _controller.loadNewChat(arg);
+    }
     return Scaffold(
       appBar: ChatDetailPageAppBar(controller: _controller),
       body: Body(controller: _controller),
     );
   }
 }
-
-

@@ -3,20 +3,21 @@ import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:otsappmobile/routes.dart';
 import 'package:otsappmobile/screens/splash/splash_screen.dart';
+import 'package:otsappmobile/services/notification_service.dart';
 
 import 'constants.dart';
 import 'theme.dart';
 
-void main() async{
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  NotificationService().init();
   runApp(MyApp());
 }
 
 class MyApp extends AppMVC {
   @override
   Widget build(BuildContext context) {
-    
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: AppName,
@@ -26,5 +27,3 @@ class MyApp extends AppMVC {
     );
   }
 }
-
-

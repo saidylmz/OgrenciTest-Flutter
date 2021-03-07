@@ -49,4 +49,15 @@ class UserService {
     if (response.statusCode == 200) return userStatisticModelFromJson(response.body);
     return null;
   }
+
+  Future<List<UserModel>> getMessageUserList() async{
+    final response = await client.post(
+      "$apiUrl/Users/GetMessageUserList",
+      headers: {"content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken },
+      body: (json.encode({"value": sUserID})),
+    );
+    if (response.statusCode == 200) return userModelListFromJson(response.body);
+    return null;
+  }
 }

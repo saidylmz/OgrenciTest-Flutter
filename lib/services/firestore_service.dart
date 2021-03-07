@@ -11,17 +11,26 @@ class FirestoreService {
                 {
                   "userId": userId ?? sUserID,
                   "name": name,
-                  "photoURL": photoUrl,
+                  "photo": photoUrl,
+                  "online": false,
+                  "token": userId == null ? sNotifToken : ""
                 },
               )
-            else
+            else if (userId == null)
               userRef.doc(value.docs.first.id).update(
-                {
-                  "online":true
-                },
+                {"online": true, "token": userId == null ? sNotifToken : ""},
               )
           },
         );
+  }
+
+  setOffline() {
+    var userRef = FirebaseFirestore.instance.collection('users');
+    userRef.where("userId", isEqualTo: sUserID).get().then((value) {
+      userRef.doc(value.docs.first.id).update(
+        {"online": false},
+      );
+    });
   }
 
   Future<FrChat> getChat(String chatDocId) async {
@@ -40,6 +49,15 @@ class FirestoreService {
         .then((value) => value.docs
             .map((e) => FrUser.fromSnapshot2(e.id, e.data()))
             .toList());
+  }
+
+  Stream<QuerySnapshot> getUnreadMessageCount(String chatId) {
+    return FirebaseFirestore.instance
+        .collection("messages")
+        .doc(chatId)
+        .collection(chatId)
+        .where("sender", isNotEqualTo: sUserID)
+        .snapshots();
   }
 
   // loadUserByUserId(int userId) async {
@@ -97,12 +115,13 @@ class FrChat {
     this.lastMessageDate,
     this.lastMessage,
     this.members,
+    this.deletedMembers,
   });
 
   String documentId;
   DateTime lastMessageDate;
   String lastMessage;
-  List<int> members;
+  List<int> members, deletedMembers;
 
   factory FrChat.fromSnapshot(DocumentSnapshot snapshot) {
     return FrChat(
@@ -110,6 +129,9 @@ class FrChat {
       lastMessageDate: (snapshot["lastMessageDate"] as Timestamp).toDate(),
       lastMessage: snapshot["lastMessage"],
       members: List.from(snapshot["members"]),
+      deletedMembers: snapshot["deletedMembers"] != null
+          ? List.from(snapshot["deletedMembers"])
+          : [],
     );
   }
   factory FrChat.fromSnapshot2(String id, Map<String, dynamic> snapshot) {
@@ -118,6 +140,9 @@ class FrChat {
       lastMessageDate: (snapshot["lastMessageDate"] as Timestamp).toDate(),
       lastMessage: snapshot["lastMessage"],
       members: List.from(snapshot["members"]),
+      deletedMembers: snapshot["deletedMembers"] != null
+          ? List.from(snapshot["deletedMembers"])
+          : [],
     );
   }
 }
@@ -148,12 +173,19 @@ class FrUser {
 }
 
 class FrMessage {
-  FrMessage({this.documentId, this.message, this.read, this.sender, this.date});
+  FrMessage(
+      {this.documentId,
+      this.message,
+      this.read,
+      this.sender,
+      this.date,
+      this.type});
 
   String documentId, message;
   bool read;
   int sender;
   DateTime date;
+  int type;
 
   // factory FrMessage.fromSnapshot(DocumentSnapshot snapshot) {
   //   return FrMessage(
@@ -169,6 +201,7 @@ class FrMessage {
         message: snapshot["message"],
         read: snapshot["read"],
         sender: snapshot["sender"],
-        date: (snapshot["date"] as Timestamp).toDate());
+        date: (snapshot["date"] as Timestamp).toDate(),
+        type: snapshot["type"]);
   }
 }

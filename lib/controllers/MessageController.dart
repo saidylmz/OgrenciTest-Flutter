@@ -10,22 +10,42 @@ class MessageController extends ControllerMVC {
   String searchText = "";
   List<FrChat> _chats;
   List<FrChat> chatList;
-
-  // loadChats() async {
-  //   //_chats = await FirestoreService().getUserChats();
-  //   //FirestoreService().getUserChats((value) => _chatListener(value));
-  //   searchList();
-  // }
-
+  
   searchList() {
     var find = sFrUsers
         .where((element) => element.name.toLowerCase().contains(searchText))
         .map((e) => e.userId)
         .toList();
-      chatList = searchText.isEmpty || searchText.length < 2
-          ? _chats
-          : _chats
-              .where((x) => x.members.any((element) => find.contains(element))).toList();
+    chatList = searchText.isEmpty || searchText.length < 2
+        ? _chats
+        : _chats
+            .where((x) => x.members.any((element) => find.contains(element)))
+            .toList();
     setState(() {});
+  }
+
+  deleteChat(int index) {
+    chatList[index].deletedMembers.add(sUserID);
+    var frInstance = FirebaseFirestore.instance;
+    frInstance
+        .collection("chats")
+        .doc(chatList[index].documentId)
+        .update({"deletedMembers": chatList[index].deletedMembers});
+    if (chatList[index].deletedMembers.length ==
+        chatList[index].members.length) {
+      frInstance
+          . collection("messages")
+          .doc(chatList[index].documentId)
+          .collection(chatList[index].documentId)
+          .get()
+          .then((value) => value.docs.forEach((element) {
+                element.reference.delete();
+              }));
+      frInstance
+          .collection("messages")
+          .doc(chatList[index].documentId)
+          .delete();
+      //frInstance.collection("chats").doc(chatList[index].documentId).delete();
+    }
   }
 }

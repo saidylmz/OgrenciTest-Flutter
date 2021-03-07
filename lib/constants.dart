@@ -30,6 +30,7 @@ const kPrimaryGradient = LinearGradient(
 const String AppName = "TEST Takip";
 
 const String apiUrl = "http://192.168.2.241:45456/api";
+const String fcmServerKey = "AAAA_Zs6pN4:APA91bEli0iUBw9ka6fHQedgS6KbknajITAOfVJp5IXW9bjKVsf7Koid0Qk7C4_DV9oOQ5h1v9dZ7iJxK_X3Y4abZMT-RhFsFfGcjZ-vWopfMTHnHhvnqwe0ggnFWIjD1wXcoquJayJN";
 
 const defaultDuration = Duration(milliseconds: 250);
 
@@ -52,6 +53,7 @@ int sUserID;
 DateTime sExpiration;
 UserModel sUser;
 List<FrUser> sFrUsers;
+String sNotifToken;
 
 final otpInputDecoration = InputDecoration(
   contentPadding:
@@ -67,3 +69,5 @@ OutlineInputBorder outlineInputBorder() {
     borderSide: BorderSide(color: kTextColor),
   );
 }
+
+Map<int, String> operationClaims = { 1: "Admin", 2: "Müdür", 3: "Öğretmen", 4: "Öğrenci" };

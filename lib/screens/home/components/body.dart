@@ -255,9 +255,7 @@ class Body extends StatelessWidget {
                             Text(
                               "Sınıf: " +
                                   controller.userStatistic.classroom
-                                      .toString() +
-                                  "/" +
-                                  controller.userStatistic.classroomBranch,
+                                      .toString(),
                               style: TextStyle(fontSize: 14),
                             ),
                           ],

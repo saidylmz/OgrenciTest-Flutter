@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+List<UserModel> userModelListFromJson(String str) =>
+    List<UserModel>.from(
+        json.decode(str).map((x) => UserModel.fromJsonForMessage(x)));
+
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
 
 String userModelToJson(UserModel data) => json.encode(data.toJson());
@@ -26,7 +30,6 @@ class UserModel {
         this.gender,
         this.operationClaimId,
         this.classroomId,
-        this.classroomBranchId,
     });
 
     int id;
@@ -49,7 +52,6 @@ class UserModel {
     bool gender;
     int operationClaimId;
     dynamic classroomId;
-    dynamic classroomBranchId;
 
     factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["Id"],
@@ -72,7 +74,13 @@ class UserModel {
         gender: json["Gender"] ?? true,
         operationClaimId: json["OperationClaimId"],
         classroomId: json["ClassroomId"],
-        classroomBranchId: json["ClassroomBranchId"],
+    );
+    factory UserModel.fromJsonForMessage(Map<String, dynamic> json) => UserModel(
+        id: json["Id"],
+        userName: json["UserName"],
+        userSurName: json["UserSurName"],
+        operationClaimId: json["OperationClaimId"],
+        classroomId: json["ClassroomId"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -96,6 +104,5 @@ class UserModel {
         "Gender": gender,
         "OperationClaimId": operationClaimId,
         "ClassroomId": classroomId,
-        "ClassroomBranchId": classroomBranchId,
     };
 }
