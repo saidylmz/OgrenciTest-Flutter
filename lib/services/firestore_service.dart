@@ -1,10 +1,13 @@
+import 'dart:io' show Platform;
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:otsappmobile/constants.dart';
 
 class FirestoreService {
   saveUserIsNotExist(String name, String photoUrl, {int userId}) {
     var userRef = FirebaseFirestore.instance.collection('users');
-    userRef.where("userId", isEqualTo: userId ?? sUserID).get().then(
+    int uId = userId == null ? sUserID : userId;
+    userRef.where("userId", isEqualTo: uId).get().then(
           (value) => {
             if (value.docs.length == 0)
               userRef.doc().set(
@@ -13,15 +16,24 @@ class FirestoreService {
                   "name": name,
                   "photo": photoUrl,
                   "online": false,
-                  "token": userId == null ? sNotifToken : ""
+                  "token": userId == null ? sNotifToken : "",
+                  "device": Platform.operatingSystem
                 },
               )
             else if (userId == null)
               userRef.doc(value.docs.first.id).update(
-                {"online": true, "token": userId == null ? sNotifToken : ""},
+                {"online": true, "token": userId == null ? sNotifToken : "", "device": Platform.operatingSystem },
               )
           },
         );
+  }
+
+  Future<String> getUserToken(int userId) async {
+    return await FirebaseFirestore.instance
+        .collection("users")
+        .where("userId", isEqualTo: userId)
+        .get()
+        .then((value) => value.docs.first.data()["token"] ?? "");
   }
 
   setOffline() {
@@ -39,6 +51,29 @@ class FirestoreService {
         .doc(chatDocId)
         .get()
         .then((value) => FrChat.fromSnapshot2(value.id, value.data()));
+  }
+
+  Future<String> isChatDeleted(int userId) async {
+    return FirebaseFirestore.instance
+        .collection("chats")
+        .where("members", arrayContains: sUserID)
+        .get()
+        .then((doc) {
+      var data = doc.docs.where((element) {
+        var chat = FrChat.fromSnapshot(element);
+        return chat.deletedMembers.contains(sUserID) &&
+            chat.members.contains(userId);
+      });
+      if (data.length > 0) {
+        var chat = FrChat.fromSnapshot(data.first);
+        FirebaseFirestore.instance
+            .collection("chats")
+            .doc(chat.documentId)
+            .update({"deletedMembers": []});
+        return chat?.documentId ?? null;
+      }
+      return null;
+    });
   }
 
   Future<List<FrUser>> getUsers(List<int> userIds) async {
@@ -59,50 +94,11 @@ class FirestoreService {
         .where("sender", isNotEqualTo: sUserID)
         .snapshots();
   }
-
-  // loadUserByUserId(int userId) async {
-  //   if (sFrUsers?.singleWhere((x) => x.userId == userId, orElse: () => null) == null) {
-  //     var tmp = await FirebaseFirestore.instance
-  //         .collection("users")
-  //         .where("userId", isEqualTo: userId)
-  //         .limit(1)
-  //         .get()
-  //         .then((value) => value.docs);
-  //     if (tmp.length > 0) {
-  //       var user = FrUser.fromSnapshot(tmp.first);
-  //       sFrUsers ??= List();
-  //       sFrUsers.add(user);
-  //     }
-  //   }
-  // }
-
-  // Future<List<FrChat>> getUserChats() async {
-  //   var db = FirebaseFirestore.instance;
-  //   var chatsRef = db.collection("chats").where("members", arrayContains: sUserID);
-  //   var chats = await chatsRef.get();
-  //   var chatList = frChatFromSnapshot(chats.docs);
-  //   for (var item in chatList) {
-  //     for (var item2 in item.members) {
-  //       await loadUserByUserId(item2);
-  //     }
-  //   }
-  //   return chatList;
-  // }
-
   Stream<QuerySnapshot> getStreamUserChats() {
     var db = FirebaseFirestore.instance;
     var chatsRef =
         db.collection("chats").where("members", arrayContains: sUserID);
     return chatsRef.snapshots();
-    // var chatsRef = db.collection("chats").where("members", arrayContains: sUserID);
-    // var chats = await chatsRef.get();
-    // var chatList = frChatFromSnapshot(chats.docs);
-    // for (var item in chatList) {
-    //   for (var item2 in item.members) {
-    //     await loadUserByUserId(item2);
-    //   }
-    // }
-    // return chatList;
   }
 }
 

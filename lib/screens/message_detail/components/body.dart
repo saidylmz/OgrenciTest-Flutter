@@ -40,7 +40,7 @@ class _BodyState extends State<Body> {
                     return ListView.builder(
                       padding: EdgeInsets.only(
                           top: getProportionateScreenHeight(10),
-                          bottom: getProportionateScreenHeight(60)),
+                          bottom: getProportionateScreenHeight(70)),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         var temp2 = (snapshot.data.documents
@@ -229,12 +229,12 @@ class _BodyState extends State<Body> {
               child: Column(
                 children: <Widget>[
                   SizedBox(
-                    height: 16,
+                    height: getProportionateScreenHeight(16),
                   ),
                   Center(
                     child: Container(
-                      height: 4,
-                      width: 50,
+                      height: getProportionateScreenHeight(4),
+                      width: getProportionateScreenWidth(50),
                       color: Colors.grey.shade200,
                     ),
                   ),
@@ -245,63 +245,67 @@ class _BodyState extends State<Body> {
                       ? WillPopScope(
                           child: widget.controller.buildSticker(context),
                           onWillPop: () {
-                            if (widget.controller.isShowSticker) {
-                              widget.controller.isShowSticker = false;
-                              Navigator.pop(context);
-                              showModal();
-                            } else {
-                              Navigator.pop(context);
-                            }
+                            widget.controller.isShowSticker = false;
+                            Navigator.pop(context);
+                            showModal();
+                            FocusScope.of(context).unfocus();
                             return Future.value(false);
                           },
                         )
-                      : ListView.builder(
-                          itemCount: widget.controller.menuItems.length,
-                          shrinkWrap: true,
-                          physics: NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: EdgeInsets.only(top: 10, bottom: 0),
-                              child: ListTile(
-                                onTap: () {
-                                  switch (
-                                      widget.controller.menuItems[index].type) {
-                                    case 0:
-                                      Navigator.pop(context);
-                                      widget.controller.getImage(false);
-                                      break;
-                                    case 1:
-                                      Navigator.pop(context);
-                                      widget.controller.getImage(true);
-                                      break;
-                                    case 2:
-                                      widget.controller.isShowSticker = true;
-                                      Navigator.pop(context);
-                                      showModal();
-                                      break;
-                                  }
-                                },
-                                leading: Container(
-                                  decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(30),
-                                    color: widget.controller.menuItems[index]
-                                        .color.shade50,
-                                  ),
-                                  height: 50,
-                                  width: 50,
-                                  child: Icon(
-                                    widget.controller.menuItems[index].icons,
-                                    size: 30,
-                                    color: widget.controller.menuItems[index]
-                                        .color.shade400,
-                                  ),
-                                ),
-                                title: Text(
-                                  widget.controller.menuItems[index].text,
-                                ),
-                              ),
-                            );
+                      : WillPopScope(
+                          onWillPop: () {
+                            Navigator.pop(context);
+                            FocusScope.of(context).unfocus();
+                            return Future.value(false);
                           },
+                          child: ListView.builder(
+                            itemCount: widget.controller.menuItems.length,
+                            shrinkWrap: true,
+                            physics: NeverScrollableScrollPhysics(),
+                            itemBuilder: (context, index) {
+                              return Container(
+                                padding: EdgeInsets.only(top: 10, bottom: 0),
+                                child: ListTile(
+                                  onTap: () {
+                                    switch (widget
+                                        .controller.menuItems[index].type) {
+                                      case 0:
+                                        Navigator.pop(context);
+                                        widget.controller.getImage(false);
+                                        break;
+                                      case 1:
+                                        Navigator.pop(context);
+                                        widget.controller.getImage(true);
+                                        break;
+                                      case 2:
+                                        widget.controller.isShowSticker = true;
+                                        Navigator.pop(context);
+                                        showModal();
+                                        break;
+                                    }
+                                  },
+                                  leading: Container(
+                                    decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(30),
+                                      color: widget.controller.menuItems[index]
+                                          .color.shade50,
+                                    ),
+                                    height: 50,
+                                    width: 50,
+                                    child: Icon(
+                                      widget.controller.menuItems[index].icons,
+                                      size: 30,
+                                      color: widget.controller.menuItems[index]
+                                          .color.shade400,
+                                    ),
+                                  ),
+                                  title: Text(
+                                    widget.controller.menuItems[index].text,
+                                  ),
+                                ),
+                              );
+                            },
+                          ),
                         ),
                 ],
               ),

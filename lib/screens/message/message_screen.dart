@@ -8,9 +8,6 @@ import 'package:otsappmobile/models/user_model.dart';
 import 'package:otsappmobile/screens/message_detail/message_detail_screen.dart';
 import 'package:otsappmobile/services/firestore_service.dart';
 import 'package:otsappmobile/services/user_service.dart';
-import 'dart:collection';
-
-import '../../size_config.dart';
 import 'components/body.dart';
 
 List<dynamic> friendList = [];
@@ -142,7 +139,7 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
                                               padding: EdgeInsets.only(
                                                   top: 10, bottom: 0),
                                               child: ListTile(
-                                                onTap: () {
+                                                onTap: () async {
                                                   Navigator.pop(context);
                                                   FirestoreService()
                                                       .saveUserIsNotExist(
@@ -165,14 +162,27 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
                                                                   data2[index]
                                                                           [i]
                                                                       .id));
-                                                  if (chat.length == 0)
-                                                    Navigator.pushNamed(
-                                                        context,
-                                                        MessageDetailScreen
-                                                            .routeName,
-                                                        arguments:
-                                                            data2[index][i].id);
-                                                  else
+                                                  if (chat.length == 0) {
+                                                    FirestoreService()
+                                                        .isChatDeleted(
+                                                            data2[index][i].id)
+                                                        .then((value) {
+                                                        if (value == null)
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              MessageDetailScreen
+                                                                  .routeName,
+                                                              arguments:
+                                                                  data2[index][i]
+                                                                      .id);
+                                                        else
+                                                          Navigator.pushNamed(
+                                                              context,
+                                                              MessageDetailScreen
+                                                                  .routeName,
+                                                              arguments: value);
+                                                    });
+                                                  } else
                                                     Navigator.pushNamed(
                                                         context,
                                                         MessageDetailScreen

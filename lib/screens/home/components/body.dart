@@ -73,7 +73,7 @@ class Body extends StatelessWidget {
                                     ),
                                     child: Padding(
                                       padding: const EdgeInsets.only(
-                                          top: 54,
+                                          top: 30,
                                           left: 10,
                                           right: 10,
                                           bottom: 8),
@@ -124,6 +124,17 @@ class Body extends StatelessWidget {
                                                   ),
                                                 ],
                                               ),
+                                            ),
+                                          ),
+                                          Text(
+                                            controller.userStatistic
+                                                .tests[index].testCategoryName,
+                                            textAlign: TextAlign.left,
+                                            style: TextStyle(
+                                              fontWeight: FontWeight.w400,
+                                              fontSize: 12,
+                                              letterSpacing: 0.2,
+                                              color: Colors.black87,
                                             ),
                                           ),
                                           Text(
@@ -254,8 +265,7 @@ class Body extends StatelessWidget {
                             ),
                             Text(
                               "Sınıf: " +
-                                  controller.userStatistic.classroom
-                                      .toString(),
+                                  controller.userStatistic.classroom.toString(),
                               style: TextStyle(fontSize: 14),
                             ),
                           ],

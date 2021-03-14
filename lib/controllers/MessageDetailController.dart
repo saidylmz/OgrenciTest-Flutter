@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:otsappmobile/constants.dart';
 import 'package:otsappmobile/services/firestore_service.dart';
+import 'package:otsappmobile/services/notification_service.dart';
 
 class SendMenuItems {
   String text;
@@ -57,7 +58,7 @@ class MessageDetailController extends ControllerMVC {
     setState(() {});
   }
 
-  void sendMessage(String content, int type) {
+  sendMessage(String content, int type) async {
     var frInstance = FirebaseFirestore.instance;
     var reference =
         frInstance.collection("messages").doc(chatId).collection(chatId).doc();
@@ -83,6 +84,16 @@ class MessageDetailController extends ControllerMVC {
         },
       );
     });
+    String token = await FirestoreService().getUserToken(toUser.first.userId);
+    if (type == 0)
+      NotificationService().pushNotification(token, toUser.first.name, content);
+    else if (type == 1)
+      NotificationService().pushNotification(
+          token, toUser.first.name, "Fotoğraf",
+          imageUrl: content);
+    else
+      NotificationService()
+          .pushNotification(token, toUser.first.name, "Sticker");
   }
 
   void sendMessageFirst(String content, int type) async {
@@ -122,6 +133,17 @@ class MessageDetailController extends ControllerMVC {
         deletedMembers: [],
         members: [sUserID, toUser.first.userId]);
     setState(() {});
+
+    String token = await FirestoreService().getUserToken(toUser.first.userId);
+    if (type == 0)
+      NotificationService().pushNotification(token, toUser.first.name, content);
+    else if (type == 1)
+      NotificationService().pushNotification(
+          token, toUser.first.name, "Fotoğraf",
+          imageUrl: content);
+    else
+      NotificationService()
+          .pushNotification(token, toUser.first.name, "Sticker");
   }
 
   File imageFile;
@@ -207,11 +229,12 @@ class MessageDetailController extends ControllerMVC {
             runSpacing: 15,
             children: <Widget>[
               for (var item in stickers)
-                FlatButton(
+                TextButton(
                   onPressed: () {
+                    isShowSticker = false;
                     sendMessage(item, 2);
                     Navigator.pop(context);
-                  },  
+                  },
                   child: Image.asset(
                     'assets/stickers/' + item,
                     width: 50.0,

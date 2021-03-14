@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:http/http.dart';
+import 'package:otsappmobile/models/scoreboard_model.dart';
 import 'package:otsappmobile/models/user_statistic_model.dart';
 
 import '../models/user_model.dart';
@@ -32,32 +33,53 @@ class UserService {
   Future<UserModel> getUserById(int userId) async {
     final response = await client.post(
       "$apiUrl/Users/GetUserById",
-      headers: {"content-type": "application/json",
-        HttpHeaders.authorizationHeader: "Bearer " + sToken },
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
       body: (json.encode({"value": userId})),
     );
     if (response.statusCode == 200) return userModelFromJson(response.body);
     return UserModel();
   }
+
   Future<UserStatisticModel> getUserStatistic() async {
     final response = await client.post(
       "$apiUrl/UserTests/GetUserStatistic",
-      headers: {"content-type": "application/json",
-        HttpHeaders.authorizationHeader: "Bearer " + sToken },
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
       body: (json.encode({"value": sUserID})),
     );
-    if (response.statusCode == 200) return userStatisticModelFromJson(response.body);
+    if (response.statusCode == 200)
+      return userStatisticModelFromJson(response.body);
     return null;
   }
 
-  Future<List<UserModel>> getMessageUserList() async{
+  Future<List<UserModel>> getMessageUserList() async {
     final response = await client.post(
       "$apiUrl/Users/GetMessageUserList",
-      headers: {"content-type": "application/json",
-        HttpHeaders.authorizationHeader: "Bearer " + sToken },
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
       body: (json.encode({"value": sUserID})),
     );
     if (response.statusCode == 200) return userModelListFromJson(response.body);
+    return null;
+  }
+
+  Future<ScoreBoardModel> getScoreBoardStatistic() async {
+    final response = await client.post(
+      "$apiUrl/Dashboard/GetScoreBoardData",
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
+      body: (json.encode({"value": sUserID})),
+    );
+    if (response.statusCode == 200) return scoreBoardModelFromJson(response.body);
     return null;
   }
 }

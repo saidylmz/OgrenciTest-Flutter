@@ -45,7 +45,7 @@ class MessageController extends ControllerMVC {
           .collection("messages")
           .doc(chatList[index].documentId)
           .delete();
-      //frInstance.collection("chats").doc(chatList[index].documentId).delete();
+      frInstance.collection("chats").doc(chatList[index].documentId).delete();
     }
   }
 }

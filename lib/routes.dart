@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:otsappmobile/screens/message/message_screen.dart';
 import 'package:otsappmobile/screens/message_detail/message_detail_screen.dart';
+import 'package:otsappmobile/screens/scoreboard/scoreboard_screen.dart';
 import 'package:otsappmobile/screens/test_answers/test_answers_screen.dart';
 import 'screens/forgot_password/forgot_password_screen.dart';
 import 'screens/home/home_screen.dart';
@@ -23,4 +24,5 @@ final Map<String, WidgetBuilder> routes = {
   TestAnswersScreen.routeName: (context) => TestAnswersScreen(),
   MessageScreen.routeName: (context) => MessageScreen(),
   MessageDetailScreen.routeName: (context) => MessageDetailScreen(),
+  ScoreBoardScreen.routeName: (context) => ScoreBoardScreen(),
 };

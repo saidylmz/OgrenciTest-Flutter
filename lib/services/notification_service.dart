@@ -121,5 +121,6 @@ class Notification {
         "body": body,
         "title": title,
         "image": image,
+        "color":"#FF7643",
       };
 }

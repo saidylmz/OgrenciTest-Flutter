@@ -25,11 +25,11 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        SingleChildScrollView(
-          child: StreamBuilder(
+    return SingleChildScrollView(
+          child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          StreamBuilder(
             stream: FirestoreService().getStreamUserChats(),
             builder: (context, snapshot) {
               if (snapshot.hasData) {
@@ -97,9 +97,9 @@ class _BodyState extends State<Body> {
               } else
                 return Center(child: Image.asset("assets/images/spinner.gif"));
             },
-          ),
-        )
-      ],
+          )
+        ],
+      ),
     );
   }
 }

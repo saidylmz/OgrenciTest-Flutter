@@ -68,6 +68,7 @@ class Test {
         this.testName,
         this.lessonName,
         this.lessonSubjectName,
+        this.testCategoryName,
         this.testQuestionCount,
         this.isActive,
         this.testId,
@@ -79,6 +80,7 @@ class Test {
     String testName;
     String lessonName;
     String lessonSubjectName;
+    String testCategoryName;
     int testQuestionCount;
     bool isActive;
     int testId;
@@ -90,6 +92,7 @@ class Test {
         testName: json["TestName"],
         lessonName: json["LessonName"],
         lessonSubjectName: json["LessonSubjectName"],
+        testCategoryName: json["TestCategoryName"],
         testQuestionCount: json["TestQuestionCount"],
         isActive: json["IsActive"],
         testId: json["TestId"],
@@ -102,6 +105,7 @@ class Test {
         "TestName": testName,
         "LessonName": lessonName,
         "LessonSubjectName": lessonSubjectName,
+        "TestCategoryName": testCategoryName,
         "TestQuestionCount": testQuestionCount,
         "IsActive": isActive,
         "TestId": testId,
