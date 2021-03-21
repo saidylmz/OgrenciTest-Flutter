@@ -30,7 +30,7 @@ class MessageDetailController extends ControllerMVC {
   String chatId;
   String inputText;
   FrChat chat;
-  List<FrUser> toUser = List();
+  List<FrUser> toUser = [];
 
   loadChatInfo(String chatId) async {
     chatId = chatId;

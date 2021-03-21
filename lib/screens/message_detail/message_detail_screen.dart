@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
-import 'package:otsappmobile/constants.dart';
 import 'package:otsappmobile/controllers/MessageDetailController.dart';
-import 'package:otsappmobile/services/firestore_service.dart';
 
 import 'components/body.dart';
 import 'components/chat_detail_page_appbar.dart';

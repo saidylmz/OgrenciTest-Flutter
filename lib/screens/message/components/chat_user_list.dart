@@ -5,8 +5,8 @@ import 'package:otsappmobile/services/firestore_service.dart';
 import 'package:otsappmobile/size_config.dart';
 
 class ChatUsersList extends StatefulWidget {
-  String name, secondaryText, image, time, chatId;
-  bool isUserOnline;
+  final String name, secondaryText, image, time, chatId;
+  final bool isUserOnline;
   ChatUsersList(
       {@required this.name,
       @required this.secondaryText,

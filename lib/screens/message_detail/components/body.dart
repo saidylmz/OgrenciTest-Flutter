@@ -316,7 +316,7 @@ class _BodyState extends State<Body> {
 }
 
 class ChatBubble extends StatefulWidget {
-  FrMessage message;
+  final FrMessage message;
   ChatBubble({@required this.message});
   @override
   _ChatBubbleState createState() => _ChatBubbleState();

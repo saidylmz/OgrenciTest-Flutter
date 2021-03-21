@@ -24,7 +24,7 @@ class CourseContent extends StatelessWidget {
                 (index) => Column(
                   children: [
                     SizedBox(height: 10),
-                    FlatButton(
+                    TextButton(
                       child: TestCard(index: index, test: model[index]),
                       onPressed: () => {
                         Navigator.pushNamed(

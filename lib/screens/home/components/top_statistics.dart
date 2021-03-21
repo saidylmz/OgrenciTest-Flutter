@@ -182,7 +182,6 @@ class TopStatistics extends StatelessWidget {
                       padding: const EdgeInsets.only(right: 16),
                       child: Center(
                         child: Stack(
-                          overflow: Overflow.visible,
                           children: <Widget>[
                             Padding(
                               padding: const EdgeInsets.all(8.0),
@@ -372,7 +371,7 @@ class CurvePainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    List<Color> colorsList = List<Color>();
+    List<Color> colorsList = [];
     if (colors != null) {
       colorsList = colors;
     } else {

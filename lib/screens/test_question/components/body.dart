@@ -33,7 +33,7 @@ class _BodyState extends State<Body> {
           if (snapshot.hasData) {
             var testQs = snapshot.data as List<TestQuestionModel>;
             _controller.answers = List.filled(_controller.questions.length, "");
-            _controller.questionIds = List();
+            _controller.questionIds = [];
             testQs.forEach((element) {
               _controller.questionIds.add(element.id);
             });
