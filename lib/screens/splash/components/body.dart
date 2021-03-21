@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import '../../../constants.dart';
 import '../../../controllers/SplashController.dart';
@@ -16,12 +17,11 @@ class Body extends StatefulWidget {
   @override
   _BodyState createState() {
     _controller = controller;
-   return _BodyState();
-  }  
+    return _BodyState();
+  }
 }
 
 class _BodyState extends State<Body> {
-
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -66,6 +66,9 @@ class _BodyState extends State<Body> {
                         else if (_controller.stateLogin == 2)
                           Navigator.pushNamedAndRemoveUntil(
                               context, HomeScreen.routeName, (r) => false);
+                        else if (_controller.stateLogin == 3) {
+                          _controller.checkConnection(context,true);
+                        }
                       },
                     ),
                     Spacer()
@@ -86,7 +89,9 @@ class _BodyState extends State<Body> {
       height: 6,
       width: _controller.currentPage == index ? 20 : 6,
       decoration: BoxDecoration(
-          color: _controller.currentPage == index ? kPrimaryColor : Color(0xFFD8D8D8),
+          color: _controller.currentPage == index
+              ? kPrimaryColor
+              : Color(0xFFD8D8D8),
           borderRadius: BorderRadius.circular(3)),
     );
   }

@@ -1,4 +1,4 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:otsappmobile/controllers/TestQuestionController.dart';
 import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
@@ -59,19 +59,37 @@ class _QuestionBottomBarState extends State<QuestionBottomBar> {
               if (widget.controller.currentQuestion < widget.controller.questions.length)
                 widget.controller.updateCurrentQuestion(1);
             } else {
-              confirmationDialog(
-                context,
-                "Testi bitirdiğiniz takdirde cevaplarınız kaydedilir ve değiştirilemez.",
-                title: "Testi Bitir",
-                confirm: false,
-                positiveText: "Bitir",
-                neutralText: "İptal",
-                closeOnBackPress: true,
-                positiveAction: () {
-                  widget.controller.saveTestQuestions();
-                  Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.controller.testId);
-                },
-              );
+              
+              AwesomeDialog(
+                      context: context,
+                      dialogType: DialogType.QUESTION,
+                      headerAnimationLoop: false,
+                      animType: AnimType.BOTTOMSLIDE,
+                      title: "Testi Bitir",
+                      desc: "Testi bitirdiğiniz takdirde cevaplarınız kaydedilir ve değiştirilemez.",
+                      buttonsTextStyle: TextStyle(color: Colors.black),
+                      showCloseIcon: true,
+                      btnCancelOnPress: () {},
+                      btnCancelText: "İptal",
+                      btnOkText: "Bitir",
+                      btnOkOnPress: () {
+                        widget.controller.saveTestQuestions();
+                        Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.controller.testId);
+                      },
+                    )..show();
+              // confirmationDialog(
+              //   context,
+              //   "Testi bitirdiğiniz takdirde cevaplarınız kaydedilir ve değiştirilemez.",
+              //   title: "Testi Bitir",
+              //   confirm: false,
+              //   positiveText: "Bitir",
+              //   neutralText: "İptal",
+              //   closeOnBackPress: true,
+              //   positiveAction: () {
+              //     widget.controller.saveTestQuestions();
+              //     Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.controller.testId);
+              //   },
+              // );
             }
           },
           child: Text(

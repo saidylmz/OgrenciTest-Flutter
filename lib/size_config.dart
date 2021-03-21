@@ -1,4 +1,4 @@
-import 'package:commons/commons.dart';
+import 'package:date_format/date_format.dart';
 import 'package:flutter/material.dart';
 
 class SizeConfig {
@@ -32,7 +32,8 @@ double getProportionateScreenWidth(double inputWidth) {
 
 String readTimestamp(int timestamp) {
   var now = DateTime.now();
-  var format = DateFormat('HH:mm a');
+  //var format = formatDate(DateTime(1989, 02, 21), [yyyy, '-', mm, '-', dd]);
+  //var format =   DateFormat('HH:mm a');
   var date = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
   var diff = now.difference(date);
   var time = '';
@@ -41,7 +42,7 @@ String readTimestamp(int timestamp) {
       diff.inSeconds > 0 && diff.inMinutes == 0 ||
       diff.inMinutes > 0 && diff.inHours == 0 ||
       diff.inHours > 0 && diff.inDays == 0) {
-    time = format.format(date);
+    time = formatDate(date, [HH, ':', mm]);// format.format(date);
   } else if (diff.inDays > 0 && diff.inDays < 7) {
     if (diff.inDays == 1) {
       time = diff.inDays.toString() + ' Gün';
@@ -61,17 +62,17 @@ String readTimestamp(int timestamp) {
 
 String readDateTime(DateTime dateTime) {
   var now = DateTime.now();
-  var format = DateFormat('HH:mm');
+  //var format = DateFormat('HH:mm');
   var diff = now.difference(dateTime);
   var time = '';
 
   if (dateTime.day != now.day && dateTime.day+1 == now.day) {
-    time = "Dün " + format.format(dateTime);
+    time = "Dün " + formatDate(dateTime, [HH, ':', mm]);
   } else if (diff.inSeconds <= 0 ||
       diff.inSeconds > 0 && diff.inMinutes == 0 ||
       diff.inMinutes > 0 && diff.inHours == 0 ||
       diff.inHours > 0 && diff.inDays == 0) {
-    time = format.format(dateTime);
+    time = formatDate(dateTime, [HH, ':', mm]);
   } else if (diff.inDays > 0 && diff.inDays < 7) {
     if (diff.inDays == 1) {
       time = diff.inDays.toString() + ' Gün';

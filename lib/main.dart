@@ -4,7 +4,7 @@ import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:otsappmobile/routes.dart';
 import 'package:otsappmobile/screens/splash/splash_screen.dart';
 import 'package:otsappmobile/services/notification_service.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'constants.dart';
 import 'theme.dart';
 
@@ -24,6 +24,14 @@ class MyApp extends AppMVC {
       theme: theme(),
       initialRoute: SplashScreen.routeName,
       routes: routes,
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('tr', 'TR'), // include country code too
+      ],
     );
   }
 }

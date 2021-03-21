@@ -1,12 +1,12 @@
 import 'dart:convert';
 
+import 'dart:typed_data';
+
 List<UserModel> userModelListFromJson(String str) =>
     List<UserModel>.from(
         json.decode(str).map((x) => UserModel.fromJsonForMessage(x)));
 
 UserModel userModelFromJson(String str) => UserModel.fromJson(json.decode(str));
-
-String userModelToJson(UserModel data) => json.encode(data.toJson());
 
 class UserModel {
     UserModel({
@@ -30,6 +30,8 @@ class UserModel {
         this.gender,
         this.operationClaimId,
         this.classroomId,
+        this.birthDate,
+        this.image
     });
 
     int id;
@@ -52,6 +54,8 @@ class UserModel {
     bool gender;
     int operationClaimId;
     dynamic classroomId;
+    DateTime birthDate;
+    String image;
 
     factory UserModel.fromJson(Map<String, dynamic> json) => UserModel(
         id: json["Id"],
@@ -74,6 +78,8 @@ class UserModel {
         gender: json["Gender"] ?? true,
         operationClaimId: json["OperationClaimId"],
         classroomId: json["ClassroomId"],
+        birthDate: DateTime.parse(json["BirthDate"]),
+        image: json["Image"],
     );
     factory UserModel.fromJsonForMessage(Map<String, dynamic> json) => UserModel(
         id: json["Id"],
@@ -81,28 +87,7 @@ class UserModel {
         userSurName: json["UserSurName"],
         operationClaimId: json["OperationClaimId"],
         classroomId: json["ClassroomId"],
+        image: json["Image"],
+        birthDate: json["BirthDate"] == null ? DateTime.now() : DateTime.parse(json["BirthDate"]),
     );
-
-    Map<String, dynamic> toJson() => {
-        "Id": id,
-        "UserName": userName,
-        "UserSurName": userSurName,
-        "CreatedAt": createdAt.toIso8601String(),
-        "CreatedUserId": createdUserId,
-        "UpdatedAt": updatedAt.toIso8601String(),
-        "UpdatedUserId": updatedUserId,
-        "Email": email,
-        "Phone": phone,
-        "ErrorPasswordCount": errorPasswordCount,
-        "LockStatus": lockStatus,
-        "LockTime": lockTime,
-        "LastLogInDate": lastLogInDate.toIso8601String(),
-        "LastLogOutDate": lastLogOutDate.toIso8601String(),
-        "PasswordHash": passwordHash,
-        "PasswordSalt": passwordSalt,
-        "IsActive": isActive,
-        "Gender": gender,
-        "OperationClaimId": operationClaimId,
-        "ClassroomId": classroomId,
-    };
 }

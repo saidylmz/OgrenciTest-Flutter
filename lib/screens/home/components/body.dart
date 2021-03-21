@@ -1,9 +1,11 @@
 import 'package:blinking_text/blinking_text.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:otsappmobile/controllers/HomeController.dart';
 import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
+import 'package:otsappmobile/services/firestore_service.dart';
 import '../../../constants.dart';
 import '../../../size_config.dart';
 import 'top_statistics.dart';
@@ -243,23 +245,28 @@ class Body extends StatelessWidget {
                     ),
                     child: Column(
                       children: [
-                        // if (controller.userStatistic.newMessageCount > 0)
-                        //   BlinkText(
-                        //     controller.userStatistic.newMessageCount
-                        //             .toString() +
-                        //         ' Yeni Mesajınız Var!',
-                        //     style:
-                        //         TextStyle(fontSize: 20.0, color: kPrimaryColor),
-                        //     endColor: kSecondaryColor,
-                        //   ),
-                        if (controller.userStatistic.newMessageCount == 0)
-                          SizedBox(height: 20),
-                        SizedBox(height: 5),
+                        FutureBuilder(
+                          future:
+                              FirestoreService().getAllUnreadMessageCount(),
+                          builder: (ctx, snapshot) {
+                            if (snapshot.hasData && snapshot.data > 0) {
+                              return BlinkText(
+                                      (snapshot.data as int).toString() +' Yeni Mesajınız Var!',
+                                      style: TextStyle(
+                                          fontSize:
+                                              getProportionateScreenHeight(20),
+                                          color: kPrimaryColor),
+                                      endColor: kSecondaryColor,
+                                    );
+                            } else
+                              return SizedBox(height: getProportionateScreenHeight(20));
+                          },
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Text(
-                              "Öğretmen: " +
+                              "Öğretmen \n" +
                                   controller.userStatistic.teacherFullName,
                               style: TextStyle(fontSize: 14),
                             ),
@@ -271,19 +278,6 @@ class Body extends StatelessWidget {
                           ],
                         ),
                         SizedBox(height: 5),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Text(
-                              "Eklenecek",
-                              style: TextStyle(fontSize: 14),
-                            ),
-                            Text(
-                              "Eklenecek",
-                              style: TextStyle(fontSize: 14),
-                            ),
-                          ],
-                        )
                       ],
                     ),
                   ),

@@ -16,7 +16,6 @@ class UserStatisticModel {
         this.correctQuestionCount,
         this.wrongQuestionCount,
         this.tests,
-        this.newMessageCount,
         this.teacherFullName,
         this.classroom,
         this.classroomBranch,
@@ -28,7 +27,6 @@ class UserStatisticModel {
     int correctQuestionCount;
     int wrongQuestionCount;
     List<Test> tests;
-    int newMessageCount = 0;
     String teacherFullName;
     int classroom;
     String classroomBranch;
@@ -40,7 +38,6 @@ class UserStatisticModel {
         correctQuestionCount: json["CorrectQuestionCount"],
         wrongQuestionCount: json["WrongQuestionCount"],
         tests: List<Test>.from(json["Tests"].map((x) => Test.fromJson(x))),
-        newMessageCount: json["NewMessageCount"],
         teacherFullName: json["TeacherFullName"],
         classroom: json["Classroom"],
         classroomBranch: json["ClassroomBranch"],
@@ -53,7 +50,6 @@ class UserStatisticModel {
         "CorrectQuestionCount": correctQuestionCount,
         "WrongQuestionCount": wrongQuestionCount,
         "Tests": List<dynamic>.from(tests.map((x) => x.toJson())),
-        "NewMessageCount": newMessageCount,
         "TeacherFullName": teacherFullName,
         "Classroom": classroom,
         "ClassroomBranch": classroomBranch,

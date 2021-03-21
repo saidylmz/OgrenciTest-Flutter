@@ -21,12 +21,10 @@ class _SplashScreenState extends StateMVC<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     SizeConfig().init(context);
-    SystemChrome.setSystemUIOverlayStyle(
-       SystemUiOverlayStyle(
-         statusBarColor: Colors.transparent,
-         statusBarIconBrightness: Brightness.dark
-      )
-  );
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+        statusBarColor: Colors.transparent,
+        statusBarIconBrightness: Brightness.dark));
+    _controller.checkConnection(context, false);
     return Scaffold(
       body: Body(controller: _controller),
     );

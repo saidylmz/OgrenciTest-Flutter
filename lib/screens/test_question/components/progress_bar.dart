@@ -1,5 +1,5 @@
 import 'dart:async';
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../screens/test_detail/test_detail_screen.dart';
@@ -9,7 +9,8 @@ class ProgressBar extends StatefulWidget {
   const ProgressBar({
     Key key,
     @required this.minute,
-    this.timeout, this.testId,
+    this.timeout,
+    this.testId,
   }) : super(key: key);
 
   final VoidCallback timeout;
@@ -42,9 +43,9 @@ class _ProgressBarState extends State<ProgressBar> {
           border: Border.all(color: kPrimaryColor, width: 1),
           borderRadius: BorderRadius.circular(50)),
       child: Stack(
-        children: [ 
+        children: [
           LayoutBuilder(
-            builder: (context, constraints) => Container( 
+            builder: (context, constraints) => Container(
               width: constraints.maxWidth * (_start / widget.minute),
               decoration: BoxDecoration(
                   gradient: kPrimaryGradient,
@@ -87,17 +88,32 @@ class _ProgressBarState extends State<ProgressBar> {
             timer.cancel();
           });
           widget.timeout();
-          errorDialog(
-            context,
-            "Cevaplarınız kaydedilmiştir.",
+          AwesomeDialog(
+            context: context,
+            animType: AnimType.SCALE,
+            dialogType: DialogType.SUCCES,
+            body: Center(
+              child: Text(
+                "Cevaplarınız kaydedilmiştir.",
+              ),
+            ),
             title: "Süre Bitti!",
-            positiveText: "Tamam",
-            closeOnBackPress: false,
-            showNeutralButton: false,
-            positiveAction: (){
-              Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.testId);
-            }
-          );
+            btnOkOnPress: () {
+              Navigator.popAndPushNamed(context, TestDetailScreen.routeName,
+                  arguments: widget.testId);
+            },
+          )..show();
+          // errorDialog(
+          //   context,
+          //   "Cevaplarınız kaydedilmiştir.",
+          //   title: "Süre Bitti!",
+          //   positiveText: "Tamam",
+          //   closeOnBackPress: false,
+          //   showNeutralButton: false,
+          //   positiveAction: (){
+          //     Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.testId);
+          //   }
+          // );
         } else {
           setState(() {
             _start++;

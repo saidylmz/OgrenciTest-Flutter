@@ -22,7 +22,11 @@ class FirestoreService {
               )
             else if (userId == null)
               userRef.doc(value.docs.first.id).update(
-                {"online": true, "token": userId == null ? sNotifToken : "", "device": Platform.operatingSystem },
+                {
+                  "online": true,
+                  "token": userId == null ? sNotifToken : "",
+                  "device": Platform.operatingSystem
+                },
               )
           },
         );
@@ -94,11 +98,31 @@ class FirestoreService {
         .where("sender", isNotEqualTo: sUserID)
         .snapshots();
   }
+
   Stream<QuerySnapshot> getStreamUserChats() {
     var db = FirebaseFirestore.instance;
     var chatsRef =
         db.collection("chats").where("members", arrayContains: sUserID);
     return chatsRef.snapshots();
+  }
+
+  Future<int> getAllUnreadMessageCount() async {
+    var db = FirebaseFirestore.instance;
+    int count = 0;
+    var chats = await db
+        .collection("chats")
+        .where("members", arrayContains: sUserID)
+        .get();
+    for (var item in chats.docs) {
+      count += await db
+          .collection("messages")
+          .doc(item.id)
+          .collection(item.id)
+          .where("sender", isNotEqualTo: sUserID)
+          .get()
+          .then((value) => value.docs.where((element) => element.data()["read"] == false).length);
+    }
+    return count;
   }
 }
 

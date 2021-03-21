@@ -1,4 +1,4 @@
-import 'package:commons/commons.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 
 import '../../../components/custom_suffix_icon.dart';
@@ -163,30 +163,25 @@ class _NewPassFormState extends State<NewPassForm> {
             press: () async {
               if (_controller.formKey.currentState.validate()) {
                 _controller.formKey.currentState.save();
-                if (_controller.model.isCoded) {
-                  var res = await UserService().updatePassword(
-                      _controller.model.email,
-                      _controller.oldPass,
-                      _controller.newPass);
-                  infoDialog(
-                    context,
-                    res,
-                    title: "Şifre Değişikliği",
-                    closeOnBackPress: false,
-                    showNeutralButton: false,
-                    positiveText: "Tamam",
-                    positiveAction: () {
-                      Navigator.pushNamedAndRemoveUntil(
-                          context, LoginScreen.routeName, (r) => false);
-                    },
-                  );
-                } else {
-                  //TODO:Eski şifre ile değiştirme
-                  if (_controller.oldPass == "12345") {
-                  } else {
-                    _controller.addError("apiden gelen");
-                  }
-                }
+                var res = await UserService().updatePassword(
+                    _controller.model.email,
+                    _controller.oldPass,
+                    _controller.newPass);
+                AwesomeDialog(
+                  context: context,
+                  animType: AnimType.SCALE,
+                  dialogType: DialogType.SUCCES,
+                  body: Center(
+                    child: Text(
+                      res,
+                    ),
+                  ),
+                  title: "Şifre Değişikliği",
+                  btnOkOnPress: () {
+                    Navigator.pushNamedAndRemoveUntil(
+                        context, LoginScreen.routeName, (r) => false);
+                  },
+                )..show();
               }
             },
           )

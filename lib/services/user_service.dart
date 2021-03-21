@@ -79,7 +79,42 @@ class UserService {
       },
       body: (json.encode({"value": sUserID})),
     );
-    if (response.statusCode == 200) return scoreBoardModelFromJson(response.body);
+    if (response.statusCode == 200)
+      return scoreBoardModelFromJson(response.body);
     return null;
+  }
+
+  Future<String> updatePhone(String phone) async {
+    final response = await client.post(
+      "$apiUrl/Users/UpdatePhone",
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
+      body: (json.encode({"UserId": sUserID, "Phone": phone})),
+    );
+    return response.body;
+  }
+  Future<String> updateBirthDate(String birthDate) async {
+    final response = await client.post(
+      "$apiUrl/Users/UpdateBirthDate",
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
+      body: (json.encode({"UserId": sUserID, "Phone": birthDate})),
+    );
+    return response.body;
+  }
+    Future<String> updateImage(String base64) async {
+    final response = await client.post(
+      "$apiUrl/Users/UpdateUserImage",
+      headers: {
+        "content-type": "application/json",
+        HttpHeaders.authorizationHeader: "Bearer " + sToken
+      },
+      body: (json.encode({"UserId": sUserID, "Image": base64})),
+    );
+    return response.body;
   }
 }

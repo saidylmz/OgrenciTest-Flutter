@@ -1,4 +1,9 @@
+import 'dart:io';
+
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
+import 'package:otsappmobile/screens/splash/splash_screen.dart';
 import '../models/login_model.dart';
 import '../services/auth_service.dart';
 import '../services/user_service.dart';
@@ -39,6 +44,36 @@ class SplashController extends ControllerMVC {
   String getSplashData(int index, String name) => splashData[index][name];
 
   void changePage(int newPage) => setState(() => currentPage = newPage);
+
+  checkConnection(BuildContext context, bool redirect) async {
+    try {
+      final result = await InternetAddress.lookup('google.com');
+      if (result.isEmpty || result[0].rawAddress.isEmpty) {
+        stateLogin = 3;
+        AwesomeDialog(
+          context: context,
+          title: "İnternet Bağlantısı",
+          dialogType: DialogType.ERROR,
+          desc: "İnternet bağlantısı başarısız. Lütfen kontrol ediniz.",
+          btnOkText: "Tamam",
+          btnOkOnPress: () {},
+        )..show();
+      } else if (redirect) {
+        Navigator.pushNamedAndRemoveUntil(
+            context, SplashScreen.routeName, (route) => false);
+      }
+    } on SocketException catch (_) {
+      stateLogin = 3;
+      AwesomeDialog(
+          context: context,
+          title: "İnternet Bağlantısı",
+          dialogType: DialogType.ERROR,
+          desc: "İnternet bağlantısı başarısız. Lütfen kontrol ediniz.",
+          btnOkText: "Tamam",
+          btnOkOnPress: () {},
+        )..show();
+    }
+  }
 }
 
 Future<int> autoLogin() async {

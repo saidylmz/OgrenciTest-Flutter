@@ -2,6 +2,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:otsappmobile/screens/home/home_screen.dart';
 import 'package:otsappmobile/screens/message/message_screen.dart';
+import 'package:otsappmobile/screens/profile/profile_screen.dart';
 import 'package:otsappmobile/screens/scoreboard/scoreboard_screen.dart';
 import '../screens/test_home/test_home_screen.dart';
 
@@ -36,6 +37,7 @@ class BottomNavigatonBar extends StatelessWidget {
             Navigator.pushNamed(context, MessageScreen.routeName);
             break;
           case 4:
+            Navigator.pushNamed(context, ProfileScreen.routeName);
             break;
         }
         return false;
