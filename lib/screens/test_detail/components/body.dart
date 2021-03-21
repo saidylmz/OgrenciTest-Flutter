@@ -35,55 +35,55 @@ class _BodyState extends State<Body> {
             ),
           ),
           child: Padding(
-            padding: EdgeInsets.only(left: 20, top: 10, right: 20),
+            padding: EdgeInsets.only(left: 20, top: 0, right: 20),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TestDetailTitleDesc(
-                    title: "Ders",
+                    title: "Test Kategorisi",
+                    desc: widget.controller.testDetail.testCategoryName),
+                SizedBox(height: getProportionateScreenHeight(10)),
+                TestDetailTitleDesc(
+                    title: "Ders / Konu",
                     desc: widget.controller.testDetail.lessons
                         .firstWhere((x) =>
                             x.id == widget.controller.testDetail.lessonId)
-                        .name),
-                SizedBox(height: getProportionateScreenHeight(15)),
-                TestDetailTitleDesc(
-                    title: "Konu",
-                    desc: widget.controller.testDetail.lessonSubjects
+                        .name + "\n" +widget.controller.testDetail.lessonSubjects
                         .firstWhere((x) =>
                             x.id ==
                             widget.controller.testDetail.lessonSubjectId)
                         .name),
-                SizedBox(height: getProportionateScreenHeight(15)),
+                SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(
                     title: "Soru Sayısı",
                     desc:
                         widget.controller.testDetail.questionCount.toString()),
-                SizedBox(height: getProportionateScreenHeight(15)),
+                SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(
                     title: "Test Süresi",
                     desc: widget.controller.testDetail.testTime.toString() +
                         " DK"),
                 if (widget.controller.testDetail.description != null)
-                  SizedBox(height: getProportionateScreenHeight(15)),
+                  SizedBox(height: getProportionateScreenHeight(10)),
                 if (widget.controller.testDetail.description != null)
                   TestDetailTitleDesc(
                       title: "Açıklama",
                       desc: widget.controller.testDetail.description),
-                SizedBox(height: getProportionateScreenHeight(15)),
+                SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(
                     title: "Başlangıç Tarihi",
                     desc: widget.controller.testInfo == null
                         ? "-"
                         : DateFormat("dd.MM.yyyy HH:mm")
                             .format(widget.controller.testInfo.startDate)),
-                SizedBox(height: getProportionateScreenHeight(15)),
+                SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(
                     title: "Bitiş Tarihi",
                     desc: widget.controller.testInfo == null
                         ? "-"
                         : DateFormat("dd.MM.yyyy HH:mm")
                             .format(widget.controller.testInfo.endDate)),
-                SizedBox(height: getProportionateScreenHeight(15)),
+                SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(
                     title: "Oluşturan",
                     desc: widget.controller.testDetail.createdUser.userName +

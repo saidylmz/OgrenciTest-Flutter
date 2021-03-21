@@ -2,8 +2,6 @@ import 'dart:convert';
 
 TestDetailModel testDetailFromJson(String str) => TestDetailModel.fromJson(json.decode(str));
 
-String testDetailToJson(TestDetailModel data) => json.encode(data.toJson());
-
 class TestDetailModel {
     TestDetailModel({
         this.id,
@@ -19,7 +17,8 @@ class TestDetailModel {
         this.lessons,
         this.lessonSubjects,
         this.testQuestions,
-        this.testTime
+        this.testTime,
+        this.testCategoryName
     });
 
     int id;
@@ -36,6 +35,7 @@ class TestDetailModel {
     List<Lesson> lessonSubjects;
     List<TestQuestion> testQuestions;
     int testTime;
+    String testCategoryName;
 
     factory TestDetailModel.fromJson(Map<String, dynamic> json) => TestDetailModel(
         id: json["Id"],
@@ -52,23 +52,8 @@ class TestDetailModel {
         lessonSubjects: List<Lesson>.from(json["LessonSubjects"].map((x) => Lesson.fromJson(x))),
         testQuestions: List<TestQuestion>.from(json["TestQuestions"].map((x) => TestQuestion.fromJson(x))),
         testTime: json["TestTime"],
+        testCategoryName: json["TestCategoryName"],
     );
-
-    Map<String, dynamic> toJson() => {
-        "Id": id,
-        "Name": name,
-        "Description": description,
-        "CreatedUserId": createdUserId,
-        "CreatedUser": createdUser.toJson(),
-        "CreatedAt": createdAt.toIso8601String(),
-        "QuestionCount": questionCount,
-        "LessonId": lessonId,
-        "LessonSubjectId": lessonSubjectId,
-        "IsActive": isActive,
-        "Lessons": List<dynamic>.from(lessons.map((x) => x.toJson())),
-        "LessonSubjects": List<dynamic>.from(lessonSubjects.map((x) => x.toJson())),
-        "TestQuestions": List<dynamic>.from(testQuestions.map((x) => x.toJson())),
-    };
 }
 
 class CreatedUser {
