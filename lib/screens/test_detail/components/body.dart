@@ -58,6 +58,7 @@ class _BodyState extends State<Body> {
                     title: "Soru Sayısı",
                     desc:
                         widget.controller.testDetail.questionCount.toString()),
+                SizedBox(height: getProportionateScreenHeight(15)),
                 TestDetailTitleDesc(
                     title: "Test Süresi",
                     desc: widget.controller.testDetail.testTime.toString() +
@@ -93,9 +94,11 @@ class _BodyState extends State<Body> {
             ),
           ),
         ),
+        SizedBox(height: getProportionateScreenHeight(25)),
         if (!widget.controller.testInfo.isCompleted &&
             widget.controller.testInfo.endDate.isBefore(DateTime.now()))
           Container(
+            padding: EdgeInsets.only(top: getProportionateScreenHeight(20)),
               child: Text(
             "Teste katılım süreniz bitmiştir.",
             style: TextStyle(fontSize: 18),

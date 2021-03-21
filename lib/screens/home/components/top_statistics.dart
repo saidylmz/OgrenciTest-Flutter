@@ -202,7 +202,10 @@ class TopStatistics extends StatelessWidget {
                                   crossAxisAlignment: CrossAxisAlignment.center,
                                   children: <Widget>[
                                     Text(
-                                      '%${((controller.userStatistic.correctQuestionCount / controller.userStatistic.questionCount) * 100).toInt()}',
+                                      controller.userStatistic.questionCount ==
+                                              0
+                                          ? "0"
+                                          : '%${((controller.userStatistic.correctQuestionCount / controller.userStatistic.questionCount) * 100).toInt()}',
                                       textAlign: TextAlign.center,
                                       style: TextStyle(
                                         fontWeight: FontWeight.normal,
@@ -233,11 +236,15 @@ class TopStatistics extends StatelessWidget {
                                       kPrimaryLightColor,
                                       kPrimaryColor,
                                     ],
-                                    angle: (controller.userStatistic
-                                                .correctQuestionCount /
-                                            controller
-                                                .userStatistic.questionCount) *
-                                        360),
+                                    angle: controller
+                                                .userStatistic.questionCount ==
+                                            0
+                                        ? 6
+                                        : (controller.userStatistic
+                                                    .correctQuestionCount /
+                                                controller.userStatistic
+                                                    .questionCount) *
+                                            360),
                                 child: SizedBox(
                                   width: 108,
                                   height: 108,
@@ -287,7 +294,11 @@ class TopStatistics extends StatelessWidget {
                     SizedBox(width: getProportionateScreenWidth(15)),
                     HomeStatQuestionText(
                         title: "Boş",
-                        text: (controller.userStatistic.questionCount-(controller.userStatistic.correctQuestionCount+controller.userStatistic.wrongQuestionCount)).toString()
+                        text: (controller.userStatistic.questionCount -
+                                (controller.userStatistic.correctQuestionCount +
+                                    controller
+                                        .userStatistic.wrongQuestionCount))
+                            .toString()
                             .toString()),
                   ],
                 ),
