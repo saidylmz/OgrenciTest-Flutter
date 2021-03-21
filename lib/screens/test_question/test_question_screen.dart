@@ -22,6 +22,7 @@ class _TestQuestionScreenState extends StateMVC<TestQuestionScreen> {
         ModalRoute.of(context).settings.arguments as TestQuestionScreenModel;
     _controller.name = model.name;
     _controller.testId = model.testId;
+    _controller.testTime = model.testTime;
     return WillPopScope(
           onWillPop: () { return null; },
           child: Scaffold(

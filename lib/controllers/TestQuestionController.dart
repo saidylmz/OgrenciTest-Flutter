@@ -7,6 +7,8 @@ import 'package:otsappmobile/services/test_service.dart';
 import '../constants.dart';
 
 class TestQuestionController extends ControllerMVC {
+  int testTime;
+
   TestQuestionController([StateMVC state]) : super(state);
 
   List<TestQuestionModel> questions;

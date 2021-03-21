@@ -58,6 +58,10 @@ class _BodyState extends State<Body> {
                     title: "Soru Sayısı",
                     desc:
                         widget.controller.testDetail.questionCount.toString()),
+                TestDetailTitleDesc(
+                    title: "Test Süresi",
+                    desc: widget.controller.testDetail.testTime.toString() +
+                        " DK"),
                 if (widget.controller.testDetail.description != null)
                   SizedBox(height: getProportionateScreenHeight(15)),
                 if (widget.controller.testDetail.description != null)
@@ -109,7 +113,8 @@ class _BodyState extends State<Body> {
                       context, TestQuestionScreen.routeName,
                       arguments: TestQuestionScreenModel(
                           widget.controller.testDetail.id,
-                          widget.controller.testDetail.name))
+                          widget.controller.testDetail.name,
+                          widget.controller.testDetail.testTime))
                 },
               ),
             ),
@@ -124,9 +129,9 @@ class _BodyState extends State<Body> {
                 press: () => {
                   Navigator.pushNamed(context, TestAnswersScreen.routeName,
                       arguments: TestQuestionScreenModel(
-                        widget.controller.testDetail.id,
-                        widget.controller.testDetail.name,
-                      ))
+                          widget.controller.testDetail.id,
+                          widget.controller.testDetail.name,
+                          widget.controller.testDetail.testTime))
                 },
               ),
             ),

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:otsappmobile/constants.dart';
 import 'package:otsappmobile/size_config.dart';
@@ -49,7 +51,7 @@ class _ScoreUserState extends State<ScoreUser> {
                 CircleAvatar(
                   backgroundImage: widget.image.isEmpty
                       ? AssetImage("assets/images/Profile Image.png")
-                      : NetworkImage(widget.image),
+                      : MemoryImage(Base64Decoder().convert(widget.image)),
                   maxRadius: 30,
                 ),
                 SizedBox(

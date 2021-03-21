@@ -18,7 +18,8 @@ class TestDetailModel {
         this.isActive,
         this.lessons,
         this.lessonSubjects,
-        this.testQuestions
+        this.testQuestions,
+        this.testTime
     });
 
     int id;
@@ -34,6 +35,7 @@ class TestDetailModel {
     List<Lesson> lessons;
     List<Lesson> lessonSubjects;
     List<TestQuestion> testQuestions;
+    int testTime;
 
     factory TestDetailModel.fromJson(Map<String, dynamic> json) => TestDetailModel(
         id: json["Id"],
@@ -49,6 +51,7 @@ class TestDetailModel {
         lessons: List<Lesson>.from(json["Lessons"].map((x) => Lesson.fromJson(x))),
         lessonSubjects: List<Lesson>.from(json["LessonSubjects"].map((x) => Lesson.fromJson(x))),
         testQuestions: List<TestQuestion>.from(json["TestQuestions"].map((x) => TestQuestion.fromJson(x))),
+        testTime: json["TestTime"],
     );
 
     Map<String, dynamic> toJson() => {

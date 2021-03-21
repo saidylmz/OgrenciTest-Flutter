@@ -21,7 +21,7 @@ class _QuestionTopBarState extends State<QuestionTopBar> {
       child: Column(
         children: [
           ProgressBar(
-            minute: 120,
+            minute: widget.controller.testTime,
             timeout: widget.controller.saveTestQuestions,
             testId: widget.controller.testId,
           ),
