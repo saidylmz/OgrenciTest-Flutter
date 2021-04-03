@@ -46,30 +46,4 @@ class LoginController extends ControllerMVC {
     }
     return false;
   }
-
-  // Future<int> _stateLogin() async => await autoLogin();
-
-  // int stateLogin = 0, currentPage = 0;
-
-  // List<Map<String, String>> splashData = [
-  //   {
-  //     "text":
-  //         "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //     "image": "assets/images/splash_1.png"
-  //   },
-  //   {
-  //     "text":
-  //         "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //     "image": "assets/images/splash_2.png"
-  //   },
-  //   {
-  //     "text":
-  //         "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
-  //     "image": "assets/images/splash_3.png"
-  //   },
-  // ];
-
-  // String getSplashData(int index, String name) => splashData[index][name];
-
-  // void changePage(int newPage) => setState(() => currentPage = newPage);
 }

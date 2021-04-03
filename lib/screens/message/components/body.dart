@@ -62,30 +62,15 @@ class _BodyState extends State<Body> {
                                   .first;
                           var toUser =
                               FrUser.fromSnapshot2(temp.id, temp.data());
-                          return Slidable(
-                            actionExtentRatio: 0.20,
-                            direction: Axis.horizontal,
-                            actionPane: SlidableScrollActionPane(),
-                            secondaryActions: <Widget>[
-                              IconSlideAction(
-                                caption: 'Sil',
-                                color: Colors.red,
-                                icon: Icons.delete,
-                                onTap: () {
-                                  widget.controller.deleteChat(i);
-                                },
-                              ),
-                            ],
-                            child: ChatUsersList(
-                              chatId: widget.controller.chatList[i].documentId,
-                              name: toUser?.name ?? "",
-                              secondaryText:
-                                  widget.controller.chatList[i].lastMessage,
-                              image: toUser?.photo ?? "",
-                              time: readDateTime(widget
-                                  .controller.chatList[i].lastMessageDate),
-                              isUserOnline: toUser?.online,
-                            ),
+                          return ChatUsersList(
+                            chatId: widget.controller.chatList[i].documentId,
+                            name: toUser?.name ?? "",
+                            secondaryText:
+                                widget.controller.chatList[i].lastMessage,
+                            image: toUser?.photo ?? "",
+                            time: readDateTime(widget
+                                .controller.chatList[i].lastMessageDate),
+                            isUserOnline: toUser?.online,
                           );
                         }
                         return Center(

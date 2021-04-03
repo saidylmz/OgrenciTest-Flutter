@@ -13,7 +13,6 @@ class UserModel {
         this.userSurName,
         this.createdAt,
         this.createdUserId,
-        this.updatedAt,
         this.updatedUserId,
         this.email,
         this.phone,
@@ -37,7 +36,6 @@ class UserModel {
     String userSurName;
     DateTime createdAt;
     int createdUserId;
-    DateTime updatedAt;
     int updatedUserId;
     String email;
     String phone;
@@ -61,7 +59,6 @@ class UserModel {
         userSurName: json["UserSurName"],
         createdAt: DateTime.parse(json["CreatedAt"]),
         createdUserId: json["CreatedUserId"],
-        updatedAt: DateTime.parse(json["UpdatedAt"]),
         updatedUserId: json["UpdatedUserId"],
         email: json["Email"],
         phone: json["Phone"],
@@ -76,7 +73,7 @@ class UserModel {
         gender: json["Gender"] ?? true,
         operationClaimId: json["OperationClaimId"],
         classroomId: json["ClassroomId"],
-        birthDate: DateTime.parse(json["BirthDate"]),
+        birthDate: json["BirthDate"] == null ? null : DateTime.parse(json["BirthDate"]),
         image: json["Image"],
     );
     factory UserModel.fromJsonForMessage(Map<String, dynamic> json) => UserModel(
