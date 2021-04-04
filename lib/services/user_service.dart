@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:http/http.dart';
 import 'package:otsappmobile/models/scoreboard_model.dart';
 import 'package:otsappmobile/models/user_statistic_model.dart';
@@ -95,6 +96,7 @@ class UserService {
     );
     return response.body;
   }
+
   Future<String> updateBirthDate(String birthDate) async {
     final response = await client.post(
       "$apiUrl/Users/UpdateBirthDate",
@@ -106,7 +108,8 @@ class UserService {
     );
     return response.body;
   }
-    Future<String> updateImage(String base64) async {
+
+  Future<String> updateImage(String base64) async {
     final response = await client.post(
       "$apiUrl/Users/UpdateUserImage",
       headers: {

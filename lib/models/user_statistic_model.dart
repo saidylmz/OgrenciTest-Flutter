@@ -18,7 +18,6 @@ class UserStatisticModel {
         this.tests,
         this.teacherFullName,
         this.classroom,
-        this.classroomBranch,
     });
 
     int completedTest;
@@ -28,8 +27,7 @@ class UserStatisticModel {
     int wrongQuestionCount;
     List<Test> tests;
     String teacherFullName;
-    int classroom;
-    String classroomBranch;
+    String classroom;
 
     factory UserStatisticModel.fromJson(Map<String, dynamic> json) => UserStatisticModel(
         completedTest: json["CompletedTest"],
@@ -40,7 +38,6 @@ class UserStatisticModel {
         tests: List<Test>.from(json["Tests"].map((x) => Test.fromJson(x))),
         teacherFullName: json["TeacherFullName"],
         classroom: json["Classroom"],
-        classroomBranch: json["ClassroomBranch"],
     );
 
     Map<String, dynamic> toJson() => {
@@ -52,7 +49,6 @@ class UserStatisticModel {
         "Tests": List<dynamic>.from(tests.map((x) => x.toJson())),
         "TeacherFullName": teacherFullName,
         "Classroom": classroom,
-        "ClassroomBranch": classroomBranch,
     };
 }
 

@@ -14,35 +14,42 @@ class Body extends StatelessWidget {
   const Body({Key key, this.controller}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    TestService()
-        .getTestUserAnswers(controller.testId)
-        .then((value) => controller.answers = value);
-    return Padding(
-      padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
-      child: FutureBuilder(
-        future: TestService().getTestQuestions(controller.testId),
-        builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            var testQs = snapshot.data as List<TestQuestionModel>;
-            controller.questions = testQs;
-            return Column(
-              children: [
-                QuestionAnswerTopBar(
-                  key: controller.topBar,
-                  controller: controller,
-                ),
-                QuestionAnswerBody(controller: controller),
-                SizedBox(height: getProportionateScreenHeight(20)),
-                QuestionAnswerBottomBar(
-                  key: controller.bottomBar,
-                  controller: controller,
-                ),
-              ],
-            );
-          } else
-            return Center(child: Image.asset("assets/images/spinner.gif"));
-        },
-      ),
+    return FutureBuilder(
+      future: TestService().getTestUserAnswers(controller.testId),
+      builder: (ctx, snap) {
+        if (snap.hasData) {
+          controller.answers = snap.data;
+          return Padding(
+            padding: EdgeInsets.fromLTRB(15, 0, 15, 15),
+            child: FutureBuilder(
+              future: TestService().getTestQuestions(controller.testId),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  var testQs = snapshot.data as List<TestQuestionModel>;
+                  controller.questions = testQs;
+                  return Column(
+                    children: [
+                      QuestionAnswerTopBar(
+                        key: controller.topBar,
+                        controller: controller,
+                      ),
+                      QuestionAnswerBody(controller: controller),
+                      SizedBox(height: getProportionateScreenHeight(20)),
+                      QuestionAnswerBottomBar(
+                        key: controller.bottomBar,
+                        controller: controller,
+                      ),
+                    ],
+                  );
+                } else
+                  return Center(
+                      child: Image.asset("assets/images/spinner.gif"));
+              },
+            ),
+          );
+        } else
+          return Center(child: Image.asset("assets/images/spinner.gif"));
+      },
     );
   }
 }

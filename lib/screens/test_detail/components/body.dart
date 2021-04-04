@@ -74,14 +74,14 @@ class _BodyState extends State<Body> {
                     title: "Başlangıç Tarihi",
                     desc: widget.controller.testInfo == null
                         ? "-"
-                        : DateFormat("dd.MM.yyyy HH:mm")
+                        : DateFormat("dd.MM.yyyy")
                             .format(widget.controller.testInfo.startDate)),
                 SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(
                     title: "Bitiş Tarihi",
                     desc: widget.controller.testInfo == null
                         ? "-"
-                        : DateFormat("dd.MM.yyyy HH:mm")
+                        : DateFormat("dd.MM.yyyy")
                             .format(widget.controller.testInfo.endDate)),
                 SizedBox(height: getProportionateScreenHeight(10)),
                 TestDetailTitleDesc(

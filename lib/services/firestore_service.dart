@@ -1,10 +1,20 @@
 import 'dart:io' show Platform;
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:otsappmobile/constants.dart';
 
 class FirestoreService {
-  saveUserIsNotExist(String name, String photoUrl, {int userId}) {
+  saveUserIsNotExist(String name, String photoUrl,
+      {int userId, bool uploadPhoto}) async {
+    if (uploadPhoto != null && uploadPhoto) {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference reference = FirebaseStorage.instance.ref().child(fileName);
+      var uploadTask =
+          reference.putString(photoUrl, format: PutStringFormat.base64);
+      var storageTaskSnapshot = await uploadTask;
+      photoUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    }
     var userRef = FirebaseFirestore.instance.collection('users');
     int uId = userId == null ? sUserID : userId;
     userRef.where("userId", isEqualTo: uId).get().then(
@@ -28,6 +38,27 @@ class FirestoreService {
                   "device": Platform.operatingSystem
                 },
               )
+          },
+        );
+  }
+
+  updateImage(String photoUrl, {bool uploadPhoto}) async {
+    if (uploadPhoto != null && uploadPhoto) {
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference reference = FirebaseStorage.instance.ref().child(fileName);
+      var uploadTask =
+          reference.putString(photoUrl, format: PutStringFormat.base64);
+      var storageTaskSnapshot = await uploadTask;
+      photoUrl = await storageTaskSnapshot.ref.getDownloadURL();
+    }
+    var userRef = FirebaseFirestore.instance.collection('users');
+    userRef.where("userId", isEqualTo: sUserID).get().then(
+          (value) => {
+            userRef.doc(value.docs.first.id).update(
+              {
+                "photo": photoUrl,
+              },
+            )
           },
         );
   }
@@ -120,7 +151,9 @@ class FirestoreService {
           .collection(item.id)
           .where("sender", isNotEqualTo: sUserID)
           .get()
-          .then((value) => value.docs.where((element) => element.data()["read"] == false).length);
+          .then((value) => value.docs
+              .where((element) => element.data()["read"] == false)
+              .length);
     }
     return count;
   }

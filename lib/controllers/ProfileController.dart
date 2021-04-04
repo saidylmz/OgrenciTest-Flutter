@@ -13,7 +13,7 @@ class ProfileController extends ControllerMVC {
   selectBirthDate(BuildContext context) {
     showDatePicker(
       context: context,
-      initialDate: sUser.birthDate, // Refer step 1
+      initialDate: sUser.birthDate ?? DateTime.now(), // Refer step 1
       firstDate: DateTime(1990),
       lastDate: DateTime.now(),
       initialEntryMode: DatePickerEntryMode.calendar,

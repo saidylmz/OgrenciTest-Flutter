@@ -18,7 +18,7 @@ class SplashContent extends StatelessWidget {
       Text(
         AppName,
         style: TextStyle(
-          fontSize: getProportionateScreenWidth(36),
+          fontSize: getProportionateScreenWidth(25),
           color: kPrimaryColor,
           fontWeight: FontWeight.bold,
         ),
@@ -31,8 +31,7 @@ class SplashContent extends StatelessWidget {
       Spacer(flex: 2),
       Image.asset(
         image,
-        height: getProportionateScreenHeight(265),
-        width: getProportionateScreenWidth(235),
+        height: getProportionateScreenHeight(500)
       )
     ]);
   }

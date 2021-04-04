@@ -29,7 +29,7 @@ class _BodyState extends State<Body> {
         child: Column(
           children: [
             Expanded(
-              flex: 3,
+              flex: 4,
               child: PageView.builder(
                 onPageChanged: (value) {
                   _controller.changePage(value);
@@ -42,7 +42,7 @@ class _BodyState extends State<Body> {
               ),
             ),
             Expanded(
-              flex: 2,
+              flex: 1,
               child: Padding(
                 padding: EdgeInsets.symmetric(
                   horizontal: getProportionateScreenWidth(20),
@@ -55,7 +55,7 @@ class _BodyState extends State<Body> {
                       children: List.generate(_controller.splashData.length,
                           (index) => buildDot(index: index)),
                     ),
-                    Spacer(flex: 3),
+                    Spacer(flex: 1),
                     DefaultButton(
                       text: "Geç",
                       press: () {

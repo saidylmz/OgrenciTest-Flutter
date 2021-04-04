@@ -20,7 +20,6 @@ class UserModel {
         this.lockStatus,
         this.lockTime,
         this.lastLogInDate,
-        this.lastLogOutDate,
         this.passwordHash,
         this.passwordSalt,
         this.isActive,
@@ -43,7 +42,6 @@ class UserModel {
     bool lockStatus;
     dynamic lockTime;
     DateTime lastLogInDate;
-    DateTime lastLogOutDate;
     String passwordHash;
     String passwordSalt;
     bool isActive;
@@ -66,7 +64,6 @@ class UserModel {
         lockStatus: json["LockStatus"],
         lockTime: json["LockTime"],
         lastLogInDate: DateTime.parse(json["LastLogInDate"]),
-        lastLogOutDate: DateTime.parse(json["LastLogOutDate"]),
         passwordHash: json["PasswordHash"],
         passwordSalt: json["PasswordSalt"],
         isActive: json["IsActive"],

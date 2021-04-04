@@ -20,8 +20,8 @@ class TestQuestionController extends ControllerMVC {
   PageController pageController = PageController();
   GlobalKey topBar = GlobalKey(), bottomBar = GlobalKey();
 
-  saveTestQuestions() {
-    TestService().addTestAnswers(
+  Future<String> saveTestQuestions() async{
+    return TestService().addTestAnswers(
       List<TestAnswerModel>.generate(
         questions.length,
         (index) => TestAnswerModel(

@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
@@ -28,7 +30,7 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
   @override
   void initState() {
     FirestoreService()
-        .saveUserIsNotExist("Sercan", "https://i.stack.imgur.com/l60Hf.png");
+        .saveUserIsNotExist(sUser.userName + " " + sUser.userSurName, sUser.image, uploadPhoto: true);
     super.initState();
   }
 
@@ -143,16 +145,16 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
                                                   Navigator.pop(context);
                                                   FirestoreService()
                                                       .saveUserIsNotExist(
-                                                          data2[index]
-                                                                      [i]
+                                                          data2[index][i]
                                                                   .userName +
                                                               " " +
                                                               data2[index][i]
                                                                   .userSurName,
-                                                          "https://i.stack.imgur.com/l60Hf.png",
+                                                          data2[index][i].image,
                                                           userId: data2[index]
                                                                   [i]
-                                                              .id);
+                                                              .id,
+                                                          uploadPhoto: true);
                                                   var chat = _controller
                                                       .chatList
                                                       .where((element) =>
@@ -167,20 +169,20 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
                                                         .isChatDeleted(
                                                             data2[index][i].id)
                                                         .then((value) {
-                                                        if (value == null)
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              MessageDetailScreen
-                                                                  .routeName,
-                                                              arguments:
-                                                                  data2[index][i]
-                                                                      .id);
-                                                        else
-                                                          Navigator.pushNamed(
-                                                              context,
-                                                              MessageDetailScreen
-                                                                  .routeName,
-                                                              arguments: value);
+                                                      if (value == null)
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            MessageDetailScreen
+                                                                .routeName,
+                                                            arguments:
+                                                                data2[index][i]
+                                                                    .id);
+                                                      else
+                                                        Navigator.pushNamed(
+                                                            context,
+                                                            MessageDetailScreen
+                                                                .routeName,
+                                                            arguments: value);
                                                     });
                                                   } else
                                                     Navigator.pushNamed(
@@ -191,8 +193,10 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
                                                             .first.documentId);
                                                 },
                                                 leading: CircleAvatar(
-                                                  backgroundImage: NetworkImage(
-                                                      "https://i.stack.imgur.com/l60Hf.png"),
+                                                  backgroundImage: MemoryImage(
+                                                      Base64Decoder().convert(
+                                                          data2[index][i]
+                                                              .image)),
                                                   maxRadius: 30,
                                                 ),
                                                 title: Text(
@@ -212,8 +216,13 @@ class _MessageScreenState extends StateMVC<MessageScreen> {
                               ],
                             );
                           } else
-                            return Container();
-                        })
+                            return Center(
+                                child:
+                                    Image.asset("assets/images/spinner.gif"));
+                        }),
+                    SizedBox(
+                      height: 20,
+                    ),
                   ],
                 ),
               ),

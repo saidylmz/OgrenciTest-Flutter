@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:otsappmobile/controllers/TestAnswersController.dart';
+import 'package:otsappmobile/size_config.dart';
 
 import 'option_answer.dart';
 
@@ -34,13 +35,16 @@ class _QuestionAnswerBodyState extends State<QuestionAnswerBody> {
                   child: Column(
                     children: [
                       for (var i = 0; i < optionNames.length; i++)
-                        OptionAnswer(
-                          text: widget.controller.questions[index]
-                              .toJson()["Question" + optionNames[i]],
-                          name: optionNames[i],
-                          index: index,
-                          controller: widget.controller,
-                          press: null,
+                        Padding(
+                          padding: const EdgeInsets.only(top:3, bottom: 3),
+                          child: OptionAnswer(
+                            text: widget.controller.questions[index]
+                                .toJson()["Question" + optionNames[i]],
+                            name: optionNames[i],
+                            index: index,
+                            controller: widget.controller,
+                            press: null,
+                          ),
                         ),
                     ],
                   ),

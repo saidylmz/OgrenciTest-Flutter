@@ -19,7 +19,7 @@ class TopStatistics extends StatelessWidget {
       transform: new Matrix4.translationValues(0.0, 30 * (1.0 - 1), 0.0),
       child: Padding(
         padding:
-            const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 18),
+            const EdgeInsets.only(left: 24, right: 24, top: 14, bottom: 14),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -38,7 +38,7 @@ class TopStatistics extends StatelessWidget {
           child: Column(
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(top: 16, left: 16, right: 16),
+                padding: const EdgeInsets.only(top: 0, left: 15, right: 15),
                 child: Row(
                   children: <Widget>[
                     Expanded(
@@ -330,7 +330,7 @@ class HomeStatQuestionText extends StatelessWidget {
             style: TextStyle(
               fontWeight: FontWeight.w500,
               fontSize: 16,
-              letterSpacing: -0.2,
+              letterSpacing: -0.6,
               color: Colors.black26,
             ),
           ),

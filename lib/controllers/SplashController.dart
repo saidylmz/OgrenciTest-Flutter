@@ -26,18 +26,23 @@ class SplashController extends ControllerMVC {
   List<Map<String, String>> splashData = [
     {
       "text":
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          "Test istatistiklerini görebileceğin ana sayfa ekranı.",
       "image": "assets/images/splash_1.png"
     },
     {
       "text":
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          "Çözdüğün ve çözmeni bekleyen testlerin listesi. Günlük, haftalık, toplam soru istatistiği.",
       "image": "assets/images/splash_2.png"
     },
     {
       "text":
-          "Lorem Ipsum is simply dummy text of the printing and typesetting industry.",
+          "Test Çözüm Ekranı",
       "image": "assets/images/splash_3.png"
+    },
+    {
+      "text":
+          "Soru sorabileceğin, sohbet edebileceğin canlı sohbet sistemi.",
+      "image": "assets/images/splash_4.png"
     },
   ];
 

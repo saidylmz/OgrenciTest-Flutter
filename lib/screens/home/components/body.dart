@@ -25,7 +25,7 @@ class Body extends StatelessWidget {
                   controller: controller,
                 ),
                 Expanded(
-                  flex: 2,
+                  flex: 3,
                   child: ListView.builder(
                     padding: EdgeInsets.symmetric(
                         horizontal: getProportionateScreenWidth(20)),
@@ -221,8 +221,8 @@ class Body extends StatelessWidget {
                   child: Container(
                     width: SizeConfig.screenWidth,
                     margin: EdgeInsets.fromLTRB(
-                        getProportionateScreenWidth(25),
-                        getProportionateScreenHeight(25),
+                        getProportionateScreenWidth(20),
+                        0,
                         getProportionateScreenWidth(20),
                         0),
                     padding: EdgeInsets.symmetric(
@@ -271,7 +271,7 @@ class Body extends StatelessWidget {
                             ),
                             Text(
                               "Sınıf: " +
-                                  controller.userStatistic.classroom.toString(),
+                                  controller.userStatistic.classroom,
                               style: TextStyle(fontSize: 14),
                             ),
                           ],

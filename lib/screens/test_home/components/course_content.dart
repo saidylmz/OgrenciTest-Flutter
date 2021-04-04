@@ -98,9 +98,9 @@ class TestCard extends StatelessWidget {
           width: 40,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: test.isActive ? Colors.green : kPrimaryColor,
+            color: test.isCompleted ? Colors.green : kPrimaryColor,
           ),
-          child: Icon(test.isActive ? Icons.check : Icons.play_arrow,
+          child: Icon(test.isCompleted ? Icons.check : Icons.play_arrow,
               color: Colors.white),
         ),
       ],

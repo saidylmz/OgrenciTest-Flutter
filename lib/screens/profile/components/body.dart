@@ -10,6 +10,7 @@ import 'package:otsappmobile/constants.dart';
 import 'package:otsappmobile/controllers/ProfileController.dart';
 import 'package:otsappmobile/models/new_password_model.dart';
 import 'package:otsappmobile/screens/new_password/new_password.dart';
+import 'package:otsappmobile/services/firestore_service.dart';
 import 'package:otsappmobile/services/user_service.dart';
 import 'package:otsappmobile/size_config.dart';
 
@@ -46,18 +47,20 @@ class _BodyState extends State<Body> {
                     if (imageFile != null) {
                       List<int> imageBytes = imageFile.readAsBytesSync();
                       sUser.image = base64Encode(imageBytes);
-                      setState(() {});
-                      UserService().updateImage(sUser.image).then((value) {
-                        AwesomeDialog(
-                          context: context,
-                          title: "Resim",
-                          dialogType: DialogType.SUCCES,
-                          desc: value,
-                          btnOkText: "Tamam",
-                          btnOkOnPress: () {
-                            //Navigator.pop(context);
-                          },
-                        )..show();
+                      setState(() {
+                        UserService().updateImage(sUser.image).then((value) {
+                          AwesomeDialog(
+                            context: context,
+                            title: "Resim",
+                            dialogType: DialogType.SUCCES,
+                            desc: value,
+                            btnOkText: "Tamam",
+                            btnOkOnPress: () {
+                              //Navigator.pop(context);
+                            },
+                          )..show();
+                        });
+                        FirestoreService().updateImage(sUser.image, uploadPhoto: true);
                       });
                     }
                   }
@@ -141,7 +144,7 @@ class _BodyState extends State<Body> {
                     children: [
                       TextSpan(
                         text: sUser.birthDate == null
-                            ? "-"
+                            ? "Tarih Belirtilmemiş"
                             : DateFormat("dd.MM.yyyy").format(sUser.birthDate),
                         style: TextStyle(color: kSecondaryColor, fontSize: 16),
                       )

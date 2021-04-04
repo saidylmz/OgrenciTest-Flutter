@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../screens/test_detail/test_detail_screen.dart';
 import '../../../constants.dart';
@@ -99,21 +100,12 @@ class _ProgressBarState extends State<ProgressBar> {
             ),
             title: "Süre Bitti!",
             btnOkOnPress: () {
+              SystemChrome.setEnabledSystemUIOverlays([SystemUiOverlay.top, SystemUiOverlay.bottom]);
               Navigator.popAndPushNamed(context, TestDetailScreen.routeName,
                   arguments: widget.testId);
+
             },
           )..show();
-          // errorDialog(
-          //   context,
-          //   "Cevaplarınız kaydedilmiştir.",
-          //   title: "Süre Bitti!",
-          //   positiveText: "Tamam",
-          //   closeOnBackPress: false,
-          //   showNeutralButton: false,
-          //   positiveAction: (){
-          //     Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.testId);
-          //   }
-          // );
         } else {
           setState(() {
             _start++;

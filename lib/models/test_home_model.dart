@@ -21,6 +21,7 @@ class TestHomeModel {
         this.testCreatedName,
         this.testQuestionCount,
         this.isActive,
+        this.isCompleted,
         this.description,
         this.createdAt,
         this.testId,
@@ -41,6 +42,7 @@ class TestHomeModel {
     String testCreatedName;
     int testQuestionCount;
     bool isActive;
+    bool isCompleted;
     dynamic description;
     DateTime createdAt;
     int testId;
@@ -61,6 +63,7 @@ class TestHomeModel {
         testCreatedName: json["TestCreatedName"],
         testQuestionCount: json["TestQuestionCount"],
         isActive: json["IsActive"],
+        isCompleted: json["IsCompleted"],
         description: json["Description"],
         createdAt: DateTime.parse(json["CreatedAt"]),
         testId: json["TestId"],
@@ -82,6 +85,7 @@ class TestHomeModel {
         "TestCreatedName": testCreatedName,
         "TestQuestionCount": testQuestionCount,
         "IsActive": isActive,
+        "IsCompleted": isCompleted,
         "Description": description,
         "CreatedAt": createdAt.toIso8601String(),
         "TestId": testId,

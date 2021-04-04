@@ -86,14 +86,14 @@ class MessageDetailController extends ControllerMVC {
     });
     String token = await FirestoreService().getUserToken(toUser.first.userId);
     if (type == 0)
-      NotificationService().pushNotification(token, toUser.first.name, content);
+      NotificationService().pushNotification(token, sUser.userName + " " + sUser.userSurName, content);
     else if (type == 1)
       NotificationService().pushNotification(
-          token, toUser.first.name, "Fotoğraf",
+          token, sUser.userName + " " + sUser.userSurName, "Fotoğraf",
           imageUrl: content);
     else
       NotificationService()
-          .pushNotification(token, toUser.first.name, "Sticker");
+          .pushNotification(token, sUser.userName + " " + sUser.userSurName, "Sticker");
   }
 
   void sendMessageFirst(String content, int type) async {
@@ -136,14 +136,14 @@ class MessageDetailController extends ControllerMVC {
 
     String token = await FirestoreService().getUserToken(toUser.first.userId);
     if (type == 0)
-      NotificationService().pushNotification(token, toUser.first.name, content);
+      NotificationService().pushNotification(token, sUser.userName + " " + sUser.userSurName, content);
     else if (type == 1)
       NotificationService().pushNotification(
-          token, toUser.first.name, "Fotoğraf",
+          token, sUser.userName + " " + sUser.userSurName, "Fotoğraf",
           imageUrl: content);
     else
       NotificationService()
-          .pushNotification(token, toUser.first.name, "Sticker");
+          .pushNotification(token, sUser.userName + " " + sUser.userSurName, "Sticker");
   }
 
   File imageFile;

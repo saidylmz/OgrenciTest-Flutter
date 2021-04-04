@@ -40,7 +40,7 @@ class _BodyState extends State<Body> {
                     return ListView.builder(
                       padding: EdgeInsets.only(
                           top: getProportionateScreenHeight(10),
-                          bottom: getProportionateScreenHeight(70)),
+                          bottom: getProportionateScreenHeight(80)),
                       shrinkWrap: true,
                       itemBuilder: (context, index) {
                         var temp2 = (snapshot.data.documents

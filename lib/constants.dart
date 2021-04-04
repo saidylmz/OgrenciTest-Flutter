@@ -27,9 +27,10 @@ const kPrimaryGradient = LinearGradient(
   end: Alignment.centerRight,
 );
 
-const String AppName = "TEST Takip";
+const String AppName = "Öğrenci Test Sistemi";
 
 const String apiUrl = "http://api.ogrencitestsistemi.site/api";
+// const String apiUrl = "http://192.168.1.11:45456/api";
 const String fcmServerKey = "AAAA_Zs6pN4:APA91bEli0iUBw9ka6fHQedgS6KbknajITAOfVJp5IXW9bjKVsf7Koid0Qk7C4_DV9oOQ5h1v9dZ7iJxK_X3Y4abZMT-RhFsFfGcjZ-vWopfMTHnHhvnqwe0ggnFWIjD1wXcoquJayJN";
 
 const defaultDuration = Duration(milliseconds: 250);

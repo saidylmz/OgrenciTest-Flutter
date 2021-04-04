@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:otsappmobile/controllers/TestQuestionController.dart';
 import 'package:otsappmobile/screens/test_detail/test_detail_screen.dart';
 
@@ -8,7 +9,8 @@ import '../../../size_config.dart';
 
 class QuestionBottomBar extends StatefulWidget {
   const QuestionBottomBar({
-    Key key, this.controller,
+    Key key,
+    this.controller,
   }) : super(key: key);
 
   final TestQuestionController controller;
@@ -47,36 +49,49 @@ class _QuestionBottomBarState extends State<QuestionBottomBar> {
         FlatButton(
           padding: EdgeInsets.symmetric(
               horizontal: getProportionateScreenWidth(
-                  widget.controller.currentQuestion < widget.controller.questions.length ? 25 : 40)),
+                  widget.controller.currentQuestion <
+                          widget.controller.questions.length
+                      ? 25
+                      : 40)),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20),
           ),
-          color: widget.controller.currentQuestion < widget.controller.questions.length ? kPrimaryColor : Colors.blue,
+          color: widget.controller.currentQuestion <
+                  widget.controller.questions.length
+              ? kPrimaryColor
+              : Colors.blue,
           onPressed: () {
-            if (widget.controller.currentQuestion < widget.controller.questions.length) {
+            if (widget.controller.currentQuestion <
+                widget.controller.questions.length) {
               widget.controller.pageController.nextPage(
                   duration: Duration(milliseconds: 250), curve: Curves.ease);
-              if (widget.controller.currentQuestion < widget.controller.questions.length)
+              if (widget.controller.currentQuestion <
+                  widget.controller.questions.length)
                 widget.controller.updateCurrentQuestion(1);
             } else {
-              
               AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.QUESTION,
-                      headerAnimationLoop: false,
-                      animType: AnimType.BOTTOMSLIDE,
-                      title: "Testi Bitir",
-                      desc: "Testi bitirdiğiniz takdirde cevaplarınız kaydedilir ve değiştirilemez.",
-                      buttonsTextStyle: TextStyle(color: Colors.black),
-                      showCloseIcon: true,
-                      btnCancelOnPress: () {},
-                      btnCancelText: "İptal",
-                      btnOkText: "Bitir",
-                      btnOkOnPress: () {
-                        widget.controller.saveTestQuestions();
-                        Navigator.popAndPushNamed(context, TestDetailScreen.routeName, arguments: widget.controller.testId);
-                      },
-                    )..show();
+                context: context,
+                dialogType: DialogType.QUESTION,
+                headerAnimationLoop: false,
+                animType: AnimType.BOTTOMSLIDE,
+                title: "Testi Bitir",
+                desc:
+                    "Testi bitirdiğiniz takdirde cevaplarınız kaydedilir ve değiştirilemez.",
+                buttonsTextStyle: TextStyle(color: Colors.black),
+                showCloseIcon: true,
+                btnCancelOnPress: () {},
+                btnCancelText: "İptal",
+                btnOkText: "Bitir",
+                btnOkOnPress: () {
+                  widget.controller.saveTestQuestions().then((value) {
+                    SystemChrome.setEnabledSystemUIOverlays(
+                        [SystemUiOverlay.top, SystemUiOverlay.bottom]);
+                    Navigator.popAndPushNamed(
+                        context, TestDetailScreen.routeName,
+                        arguments: widget.controller.testId);
+                  });
+                },
+              )..show();
               // confirmationDialog(
               //   context,
               //   "Testi bitirdiğiniz takdirde cevaplarınız kaydedilir ve değiştirilemez.",
@@ -93,7 +108,10 @@ class _QuestionBottomBarState extends State<QuestionBottomBar> {
             }
           },
           child: Text(
-            widget.controller.currentQuestion < widget.controller.questions.length ? "Sonraki Soru" : "Testi Bitir",
+            widget.controller.currentQuestion <
+                    widget.controller.questions.length
+                ? "Sonraki Soru"
+                : "Testi Bitir",
             style: TextStyle(
               fontSize: getProportionateScreenWidth(18),
               color: Colors.white,

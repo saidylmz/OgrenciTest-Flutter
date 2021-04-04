@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:mvc_pattern/mvc_pattern.dart';
 import 'package:otsappmobile/controllers/TestQuestionController.dart';
 import '../../models/test_question_screen_model.dart';
@@ -18,6 +19,7 @@ class _TestQuestionScreenState extends StateMVC<TestQuestionScreen> {
   TestQuestionController _controller;
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setEnabledSystemUIOverlays([]);
     var model =
         ModalRoute.of(context).settings.arguments as TestQuestionScreenModel;
     _controller.name = model.name;

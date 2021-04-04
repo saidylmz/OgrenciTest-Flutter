@@ -31,13 +31,13 @@ class _BodyState extends State<Body> {
         future: TestService().getTestQuestions(_controller.testId),
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            var testQs = (snapshot.data as List<TestQuestionModel>).where((element) => element.isActive);
+            var testQs = (snapshot.data as List<TestQuestionModel>).where((element) => element.isActive).toList();
+            _controller.questions = testQs;
             _controller.answers = List.filled(_controller.questions.length, "");
             _controller.questionIds = [];
             testQs.forEach((element) {
               _controller.questionIds.add(element.id);
             });
-            _controller.questions = testQs;
             return Column(
               children: [
                 QuestionTopBar(
